@@ -10,7 +10,7 @@ public class StartLobbyController : MonoBehaviourPunCallbacks
     [SerializeField]
     private int roomSize;
 
-    public void Start()
+    private void Start()
     {
         newLobbyPanel.SetActive(false);
     }
@@ -20,9 +20,10 @@ public class StartLobbyController : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    public void QuickStart()
+    public void JoinTheGame()
     {
         PhotonNetwork.JoinRandomRoom();
+        Debug.Log("Start");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -36,12 +37,7 @@ public class StartLobbyController : MonoBehaviourPunCallbacks
         Debug.Log("Creating room now...");
         int randomRoomNumber = GenerateRoomNumber();
 
-        RoomOptions roomOps = new RoomOptions()
-        {
-            IsVisible = true,
-            IsOpen = true,
-            MaxPlayers = (byte)roomSize
-        };
+        RoomOptions roomOps = CreateRoomOptions();
 
         PhotonNetwork.CreateRoom("Room" + randomRoomNumber, roomOps);
         Debug.Log(randomRoomNumber);
@@ -50,14 +46,12 @@ public class StartLobbyController : MonoBehaviourPunCallbacks
     private int GenerateRoomNumber()
         => Random.Range(0, 10000);
 
+    private RoomOptions CreateRoomOptions()
+        => new RoomOptions() { IsVisible = true , IsOpen = true, MaxPlayers = (byte)roomSize};
+
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         Debug.LogWarning("Failed to create a room");
         CreateRoom();
-    }
-
-    public void CancelGame()
-    {
-        PhotonNetwork.LeaveRoom();
     }
 }

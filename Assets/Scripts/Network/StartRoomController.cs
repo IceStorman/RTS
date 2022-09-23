@@ -5,6 +5,8 @@ public class StartRoomController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private int multiplayerSceneIndex;
+    [SerializeField]
+    private GameObject lobbyPanel;
 
     public override void OnEnable()
     {
@@ -19,7 +21,7 @@ public class StartRoomController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Joining to the room...");
-        StartGame();
+        lobbyPanel.SetActive(true);
     }
 
     private void StartGame()
