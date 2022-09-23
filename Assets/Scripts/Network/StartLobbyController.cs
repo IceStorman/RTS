@@ -20,27 +20,21 @@ public class StartLobbyController : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    public void JoinTheGame()
-    {
-        PhotonNetwork.JoinRandomRoom();
-        Debug.Log("Start");
-    }
-
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        Debug.LogWarning("Failed to join a room");
-        CreateRoom();
-    }
-
-    private void CreateRoom()
+    public void CreateRoom()
     {
         Debug.Log("Creating room now...");
+
         int randomRoomNumber = GenerateRoomNumber();
 
         RoomOptions roomOps = CreateRoomOptions();
 
         PhotonNetwork.CreateRoom("Room" + randomRoomNumber, roomOps);
         Debug.Log(randomRoomNumber);
+    }
+
+    public override void OnCreatedRoom()
+    {
+        newLobbyPanel.SetActive(true);
     }
 
     private int GenerateRoomNumber()

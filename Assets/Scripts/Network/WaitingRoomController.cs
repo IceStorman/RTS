@@ -47,6 +47,11 @@ public class WaitingRoomController : MonoBehaviourPunCallbacks
         PlayerCountUpdate();
     }
 
+    public override void OnCreatedRoom()
+    {
+        PlayerCountUpdate();
+    }
+
     private void PlayerCountUpdate()
     {
         countOfPlayers = PhotonNetwork.PlayerList.Length;
@@ -70,7 +75,7 @@ public class WaitingRoomController : MonoBehaviourPunCallbacks
         PlayerCountUpdate();
 
         if (PhotonNetwork.IsMasterClient)
-            playerPhotonView.RPC("RPS_SendTimer", RpcTarget.Others, timerToStartGame);
+            playerPhotonView.RPC("RPC_SendTimer", RpcTarget.Others, timerToStartGame);
     }
 
     [PunRPC]
@@ -82,6 +87,11 @@ public class WaitingRoomController : MonoBehaviourPunCallbacks
         {
             fullGameTimer = timeIn;
         }
+    }
+
+    public override void OnJoinedRoom()
+    {
+        PlayerCountUpdate();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
