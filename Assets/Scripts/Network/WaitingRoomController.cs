@@ -43,8 +43,6 @@ public class WaitingRoomController : MonoBehaviourPunCallbacks
         fullGameTimer = maxFullGameWaitTime;
         notFullGameTimer = maxWaitTime;
         timerToStartGame = maxWaitTime;
-
-        PlayerCountUpdate();
     }
 
     public override void OnCreatedRoom()
