@@ -3195,6 +3195,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 271825511}
     - target: {fileID: 1815281897661885548, guid: 102335c8c70feaa49b85f7f9f0c73971, type: 3}
+      propertyPath: lobbyNameDisplay
+      value: 
+      objectReference: {fileID: 867360384}
+    - target: {fileID: 1815281897661885548, guid: 102335c8c70feaa49b85f7f9f0c73971, type: 3}
       propertyPath: maxPlayersDisplay
       value: 
       objectReference: {fileID: 676607384}

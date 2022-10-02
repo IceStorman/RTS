@@ -26,9 +26,10 @@ public class StartLobbyController : MonoBehaviourPunCallbacks
 
         int randomRoomNumber = GenerateRoomNumber();
 
-        RoomOptions roomOps = CreateRoomOptions();
+        RoomOptions roomOps = CreateRoomOptions();  
 
         PhotonNetwork.CreateRoom("Room" + randomRoomNumber, roomOps);
+        CreateRoomName(randomRoomNumber);
         Debug.Log(randomRoomNumber);
     }
 
@@ -42,6 +43,9 @@ public class StartLobbyController : MonoBehaviourPunCallbacks
 
     private RoomOptions CreateRoomOptions()
         => new RoomOptions() { IsVisible = true , IsOpen = true, MaxPlayers = (byte)roomSize};
+
+    private void CreateRoomName(int randomRoomName)
+        => PhotonNetwork.CurrentLobby.Name = "Room" + randomRoomName;
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {

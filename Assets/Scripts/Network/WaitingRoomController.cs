@@ -18,6 +18,8 @@ public class WaitingRoomController : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject lobbyPanel;
     [SerializeField]
+    private TextMeshProUGUI lobbyNameDisplay;
+    [SerializeField]
     private TextMeshProUGUI countOfPlayersDisplay;
     [SerializeField]
     private TextMeshProUGUI maxPlayersDisplay;
@@ -52,6 +54,7 @@ public class WaitingRoomController : MonoBehaviourPunCallbacks
 
     private void PlayerCountUpdate()
     {
+        lobbyNameDisplay.text = PhotonNetwork.CurrentRoom.Name;
         countOfPlayers = PhotonNetwork.PlayerList.Length;
         roomSize = PhotonNetwork.CurrentRoom.MaxPlayers;
         countOfPlayersDisplay.text = countOfPlayers.ToString();
