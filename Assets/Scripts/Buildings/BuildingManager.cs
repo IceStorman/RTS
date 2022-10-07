@@ -56,10 +56,10 @@ public class BuildingManager : MonoBehaviour
         float bottomHeight = c.y - e.y + 0.5f;
         Vector3[] bottomCorners = new Vector3[]
         {
-        new Vector3(c.x - e.x, bottomHeight, c.z - e.z),
-        new Vector3(c.x - e.x, bottomHeight, c.z + e.z),
-        new Vector3(c.x + e.x, bottomHeight, c.z - e.z),
-        new Vector3(c.x + e.x, bottomHeight, c.z + e.z)
+            new Vector3(c.x - e.x, bottomHeight, c.z - e.z),
+            new Vector3(c.x - e.x, bottomHeight, c.z + e.z),
+            new Vector3(c.x + e.x, bottomHeight, c.z - e.z),
+            new Vector3(c.x + e.x, bottomHeight, c.z + e.z)
         };
 
         int invalidCornersCount = 0;

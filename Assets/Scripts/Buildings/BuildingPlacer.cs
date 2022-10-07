@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BuildingPlacer : MonoBehaviour
 {
-    private Structure _placedStructure = null;
+    private Structure _placedStructure = new Structure(Globals.BUILDING_DATA[0]);
 
     private Ray _ray;
     private RaycastHit _raycastHit;

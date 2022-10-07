@@ -24,16 +24,20 @@ public class Structure
     {
         _data = data;
         _currentHealth = data.HP;
+
+        GameObject g = Object.Instantiate(
+            Resources.Load($"Prefabs/Buildings/{_data.Code}")
+        ) as GameObject;
+
+        _transform = g.transform;
+
         _materials = new List<Material>();
-        foreach(Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials)
+
+        foreach (Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials)
         {
             _materials.Add(material);
         }
 
-        GameObject g = Object.Instantiate(
-            Resources.Load($"Prefabs/Buildings/Data/{_data.Code}")
-            as GameObject);
-        _transform = g.transform;
         _buildingManager = g.GetComponent<BuildingManager>();
         _placement = BuildingPlacement.VALID;
         SetMaterials();
