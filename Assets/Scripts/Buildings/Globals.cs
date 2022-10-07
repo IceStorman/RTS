@@ -4,6 +4,7 @@ public class Globals
 
     public static BuildingData[] BUILDING_DATA = new BuildingData[]
     {
-        new BuildingData("Struct", 100)
+        new BuildingData("House", 100),
+        new BuildingData("Tower", 50)
     };
 }

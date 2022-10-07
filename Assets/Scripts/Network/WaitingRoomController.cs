@@ -107,7 +107,7 @@ public class WaitingRoomController : MonoBehaviourPunCallbacks
 
     private void WaitingForMorePlayers()
     {
-        if(countOfPlayers <= 1)
+        if(countOfPlayers < minPlayersToStart)
         {
             ResetTimer();
         }

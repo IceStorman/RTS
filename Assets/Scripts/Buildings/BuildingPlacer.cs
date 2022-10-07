@@ -8,9 +8,9 @@ public class BuildingPlacer : MonoBehaviour
     private RaycastHit _raycastHit;
     private Vector3 _lastPlacementPosition;
 
-    private void Start()
+    public void SelectPlacedBuilding(int buildingIndex)
     {
-        _PreparePlacedBuilding(0);
+        _PreparePlacedBuilding(buildingIndex);
     }
 
     private void Update()
