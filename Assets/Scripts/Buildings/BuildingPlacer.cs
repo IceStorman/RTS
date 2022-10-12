@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BuildingPlacer : MonoBehaviour
 {
-    private Structure _placedStructure = new Structure(Globals.BUILDING_DATA[0]);
+    private UIManager _uiManager;
+
+    private Structure _placedStructure = null;
 
     private Ray _ray;
     private RaycastHit _raycastHit;
@@ -11,6 +14,11 @@ public class BuildingPlacer : MonoBehaviour
     public void SelectPlacedBuilding(int buildingIndex)
     {
         _PreparePlacedBuilding(buildingIndex);
+    }
+
+    private void Awake()
+    {
+        _uiManager = GetComponent<UIManager>();
     }
 
     private void Update()
@@ -26,7 +34,8 @@ public class BuildingPlacer : MonoBehaviour
 
         _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(
+        if (_placedStructure != null &&
+            Physics.Raycast(
             _ray,
             out _raycastHit,
             1000f,
@@ -41,7 +50,9 @@ public class BuildingPlacer : MonoBehaviour
             _lastPlacementPosition = _raycastHit.point;
         }
 
-        if (_placedStructure.HasValidPlacement && Input.GetMouseButtonDown(0))
+        if (_placedStructure.HasValidPlacement &&
+            Input.GetMouseButtonDown(0) &&
+            !EventSystem.current.IsPointerOverGameObject())
         {
             _PlaceBuilding();
         }
@@ -66,7 +77,12 @@ public class BuildingPlacer : MonoBehaviour
     private void _PlaceBuilding()
     {
         _placedStructure.Place();
-        _PreparePlacedBuilding(_placedStructure.DataIndex);
+        if (_placedStructure.CanBuy())
+            _PreparePlacedBuilding(_placedStructure.DataIndex);
+        else
+            _placedStructure = null;
+        _uiManager.UpdateResourceTexts();
+        _uiManager.CheckBuildingButtons();
     }
 
     private void _CancelPlacedBuilding()
