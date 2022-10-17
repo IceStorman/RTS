@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class BuildingData
 {
@@ -19,6 +20,8 @@ public class BuildingData
         {
             if (Globals.GAME_RESOURCES[pair.Key].Amount < pair.Value)
                 return false;
+            Debug.Log($"{pair.Key}: {Globals.GAME_RESOURCES[pair.Key].Amount}");
+            Debug.Log(pair.Value);
         }
         return true;
     }

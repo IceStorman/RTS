@@ -8,14 +8,14 @@ public class Globals
     {
         new BuildingData("House", 100, new Dictionary<string, int>()
         {
-            { "gold",  -100 },
-            { "wood", -120 }
+            { "gold",  100 },
+            { "wood", 120 }
         }),
         new BuildingData("Tower", 50, new Dictionary<string, int>()
         {
-            { "gold", -80 },
-            { "wood", -80 },
-            { "stone", -100 }
+            { "gold", 80 },
+            { "wood", 80 },
+            { "stone", 100 }
         })
     };
 

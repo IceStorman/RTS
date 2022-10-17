@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public enum BuildingPlacement
 {
@@ -83,12 +84,13 @@ public class Structure
         _transform.GetComponent<BoxCollider>().isTrigger = false;
         foreach(KeyValuePair<string, int> pair in _data.Cost)
         {
-            Globals.GAME_RESOURCES[pair.Key].AddAmount(pair.Value);
+            Globals.GAME_RESOURCES[pair.Key].AddAmount(-pair.Value);
         }
     }
 
     public bool CanBuy()
     {
+        Debug.Log(_data.CanBuy());
         return _data.CanBuy();
     }
 
