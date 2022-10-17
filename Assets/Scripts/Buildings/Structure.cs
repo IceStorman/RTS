@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.IO;
 
 public enum BuildingPlacement
 {
@@ -90,7 +91,6 @@ public class Structure
 
     public bool CanBuy()
     {
-        Debug.Log(_data.CanBuy());
         return _data.CanBuy();
     }
 
