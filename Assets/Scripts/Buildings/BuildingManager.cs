@@ -28,6 +28,11 @@ public class BuildingManager : UnitManager
         CheckPlacement();
     }
 
+    protected override bool IsActive()
+    {
+        return _building.IsFixed;
+    }
+
     public bool CheckPlacement()
     {
         if (_building == null) return false;
