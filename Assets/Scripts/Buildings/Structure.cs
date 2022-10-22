@@ -25,13 +25,12 @@ public class Structure
     public Structure(BuildingData data)
     {
         _data = data;
-        _currentHealth = data.HP;
+        _currentHealth = data.healthpoints;
 
-        GameObject g = Object.Instantiate(
-            Resources.Load($"Prefabs/Buildings/{_data.Code}")
-        ) as GameObject;
-
+        GameObject g = Object.Instantiate(data.prefab);
         _transform = g.transform;
+
+        _buildingManager = g.GetComponent<BuildingManager>();
 
         _materials = new List<Material>();
 
@@ -40,7 +39,6 @@ public class Structure
             _materials.Add(material);
         }
 
-        _buildingManager = g.GetComponent<BuildingManager>();
         _placement = BuildingPlacement.VALID;
         SetMaterials();
     }
@@ -83,9 +81,9 @@ public class Structure
         _placement = BuildingPlacement.FIXED;
         SetMaterials();
         _transform.GetComponent<BoxCollider>().isTrigger = false;
-        foreach(KeyValuePair<string, int> pair in _data.Cost)
+        foreach(ResourceValue resource in _data.cost)
         {
-            Globals.GAME_RESOURCES[pair.Key].AddAmount(-pair.Value);
+            Globals.GAME_RESOURCES[resource.code].AddAmount(-resource.amount);
         }
     }
 
@@ -107,10 +105,10 @@ public class Structure
         _transform.position = position;
     }
 
-    public string Code { get => _data.Code; }
+    public string Code { get => _data.code; }
     public Transform Transform { get => _transform; }
     public int HP { get => _currentHealth; set => _currentHealth = value; }
-    public int MaxHP { get => _currentHealth; }
+    public int MaxHP { get => _data.healthpoints; }
     public bool HasValidPlacement { get => _placement == BuildingPlacement.VALID; }
     public bool IsFixed { get => _placement == BuildingPlacement.FIXED; }
     public int DataIndex
@@ -119,7 +117,7 @@ public class Structure
         {
             for(int i = 0; i < Globals.BUILDING_DATA.Length; i++)
             {
-                if(Globals.BUILDING_DATA[i].Code == _data.Code)
+                if(Globals.BUILDING_DATA[i].code == _data.code)
                 {
                     return i;
                 }
