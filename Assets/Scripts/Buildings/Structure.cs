@@ -28,6 +28,7 @@ public class Structure
         _currentHealth = data.healthpoints;
 
         GameObject g = Object.Instantiate(data.prefab);
+        
         _transform = g.transform;
 
         _buildingManager = g.GetComponent<BuildingManager>();
