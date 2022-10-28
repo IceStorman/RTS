@@ -82,8 +82,8 @@ public class BuildingPlacer : MonoBehaviour
             _PreparePlacedBuilding(_placedStructure.DataIndex);
         else
             _placedStructure = null;
-        _uiManager.UpdateResourceTexts();
-        _uiManager.CheckBuildingButtons();
+        EventManager.TriggerEvent("UpdateResourceTexts");
+        EventManager.TriggerEvent("CheckBuildingButtons");
     }
 
     private void _CancelPlacedBuilding()
