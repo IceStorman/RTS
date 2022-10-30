@@ -1144,7 +1144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1635152401
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1268,8 +1268,6 @@ MonoBehaviour:
   buildingButtonPrefab: {fileID: 6221840415373918542, guid: 5bf4da8b550249246bb361882e48eb17, type: 3}
   resourcesUIParent: {fileID: 1305688606}
   gameResourcesDisplayPrefab: {fileID: 383229889970613181, guid: cd5c5f60c2d1bd44c855f9a71efa0e2e, type: 3}
-  gameResourcesCostPrefab: {fileID: 1626299480123031794, guid: 8044ce5114caa064ea1860c1bd6e16e7, type: 3}
-  infoPanel: {fileID: 1635152400}
 --- !u!114 &1670170079
 MonoBehaviour:
   m_ObjectHideFlags: 0
