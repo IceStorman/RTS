@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a690fa81505d7c47b0c66e1b2073c4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 210c8e305c0ef1f4e97fc37458db28c5, type: 3}
   m_Name: Tower
   m_EditorClassIdentifier: 
   unitName: Tower
   code: tower
   description: Defence building
-  healthpoints: 50
+  healthpoints: 120
   prefab: {fileID: 2459024928930821840, guid: d0d7c9c482b146149884b4a02bedead9, type: 3}
   cost:
   - code: gold

@@ -20,6 +20,12 @@ public class UIManager : MonoBehaviour
     {
         _buildingPlacer = GetComponent<BuildingPlacer>();
 
+        InitResources();
+        InitBuildingButtons();
+    }
+
+    private void InitResources()
+    {
         _resourceTexts = new Dictionary<string, TextMeshProUGUI>();
 
         foreach (KeyValuePair<string, GameResource> pair in Globals.GAME_RESOURCES)
@@ -27,12 +33,14 @@ public class UIManager : MonoBehaviour
             GameObject display = Instantiate(gameResourcesDisplayPrefab, resourcesUIParent);
             display.name = pair.Key;
             _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            _SetResourceText(pair.Key, pair.Value.Amount);
+            SetResourceText(pair.Key, pair.Value.Amount);
             display.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>(
                     $"Textures/GameResources/{pair.Key}");
-            Debug.Log(pair.Value.Amount);
         }
+    }
 
+    private void InitBuildingButtons()
+    {
         _buildingButtons = new Dictionary<string, Button>();
 
         for (int i = 0; i < Globals.BUILDING_DATA.Length; i++)
@@ -56,35 +64,37 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        UpdateResourceTexts();
-        CheckBuildingButtons();
+        EventManager.AddListener("UpdateResourceTexts", OnUpdateResourceTexts);
+        EventManager.AddListener("CheckBuildingButtons", OnCheckBuildingButtons);
     }
 
-    private void _SetResourceText(string resource, int value)
+    private void OnDisable()
+    {
+        EventManager.RemoveListener("UpdateResourceTexts", OnUpdateResourceTexts);
+        EventManager.RemoveListener("CheckBuildingButtons", OnCheckBuildingButtons);
+    }
+
+    private void OnUpdateResourceTexts()
+    {
+        foreach (KeyValuePair<string, GameResource> pair in Globals.GAME_RESOURCES)
+            SetResourceText(pair.Key, pair.Value.Amount);
+    }
+
+    private void SetResourceText(string resource, int value)
     {
         _resourceTexts[resource].text = value.ToString();
+    }
+
+    private void OnCheckBuildingButtons()
+    {
+        foreach (BuildingData data in Globals.BUILDING_DATA)
+            _buildingButtons[data.code].interactable = data.CanBuy();
     }
 
     private void _AddBuildingButtonListener(Button b, int i)
     {
         b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
-    }
-
-    public void UpdateResourceTexts()
-    {
-        foreach(KeyValuePair<string, GameResource> pair in Globals.GAME_RESOURCES)
-        {
-            _SetResourceText(pair.Key, pair.Value.Amount);
-        }
-    }
-
-    public void CheckBuildingButtons()
-    {
-        foreach(BuildingData data in Globals.BUILDING_DATA)
-        {
-            _buildingButtons[data.code].interactable = data.CanBuy();
-        }
     }
 }

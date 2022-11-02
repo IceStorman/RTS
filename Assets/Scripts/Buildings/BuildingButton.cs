@@ -32,22 +32,25 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         _buildingData = buildingData;
     }
 
+    private void OnHoverBuildingButton(CustomEventData data)
+    {
+        SetInfoPanel((BuildingData)data.unitData);
+        ShowInfoPanel(true);
+    }
+
+    private void OnUnhoverBuildingButton()
+    {
+        ShowInfoPanel(false);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("Enter");
-        if (!infoPanel.activeSelf)
-        {
-            ShowInfoPanel(true);
-            SetInfoPanel(_buildingData);
-        }
+        OnHoverBuildingButton(new CustomEventData(_buildingData));
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (infoPanel.activeSelf)
-        {
-            ShowInfoPanel(false);
-        }
+        OnUnhoverBuildingButton();
     }
 
     public void SetInfoPanel(BuildingData data)
