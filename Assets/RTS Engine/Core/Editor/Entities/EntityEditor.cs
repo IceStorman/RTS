@@ -8,8 +8,8 @@ using RTSEngine.Movement;
 
 namespace RTSEngine.EditorOnly.Entities
 {
-    [CustomEditor(typeof(Unit))]
-    public class UnitEditor : EntityEditor<Unit>
+    [CustomEditor(typeof(UnitRTS))]
+    public class UnitEditor : EntityEditor<UnitRTS>
     {
         private string[][] toolbars = new string[][] {
             new string[] { "Entity", "Faction Entity", "Unit" }
@@ -111,7 +111,7 @@ namespace RTSEngine.EditorOnly.Entities
 
             EditorGUILayout.PropertyField(SO.FindProperty("description"));
             EditorGUILayout.PropertyField(SO.FindProperty("icon"));
-            if (comp is Unit)
+            if (comp is UnitRTS)
                 GUI.enabled = false;
             EditorGUILayout.PropertyField(SO.FindProperty("radius"));
             GUI.enabled = true;

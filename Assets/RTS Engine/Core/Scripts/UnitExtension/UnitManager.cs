@@ -115,7 +115,7 @@ namespace RTSEngine.UnitExtension
         private void HandleEntityFactionUpdateStartGlobal(IEntity updatedInstance, FactionUpdateArgs args)
         {
             if (updatedInstance.IsUnit() && updatedInstance.IsFree) //if the source unit was free
-                freeUnits.Remove(updatedInstance as Unit);
+                freeUnits.Remove(updatedInstance as UnitRTS);
         }
         #endregion
 

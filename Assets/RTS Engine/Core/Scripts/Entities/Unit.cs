@@ -8,7 +8,7 @@ using RTSEngine.Health;
 
 namespace RTSEngine.Entities
 {
-    public class Unit : FactionEntity, IUnit
+    public class UnitRTS : FactionEntity, IUnit
     {
         #region Class Attributes
         public sealed override EntityType Type => EntityType.unit;

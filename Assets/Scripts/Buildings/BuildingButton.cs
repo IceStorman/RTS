@@ -55,7 +55,7 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void SetInfoPanel(BuildingData data)
     {
-        if (data.code != "")
+        if (data.unitName != "")
             _infoPanelTitleText.text = data.unitName;
         if (data.description != "")
             _infoPanelDescriptionText.text = data.description;
