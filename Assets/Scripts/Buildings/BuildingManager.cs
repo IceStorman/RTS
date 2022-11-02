@@ -3,10 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class BuildingManager : UnitManager
 {
-    private BoxCollider _collider;
-
     private Structure _building = null;
     private int _nCollisions = 0;
+
+    protected override Unit Unit
+    {
+        get { return _building; }
+        set { _building = value is Structure ? (Structure)value : null; }
+    }
 
     public void Initialize(Structure building)
     {

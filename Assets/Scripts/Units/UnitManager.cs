@@ -9,9 +9,18 @@ public class UnitManager : MonoBehaviour
     private Transform _canvas;
     private GameObject _healthbar;
 
+    protected BoxCollider _collider;
+    protected virtual Unit Unit { get; set; }
+
     private void Awake()
     {
         _canvas = GameObject.Find("Canvas").transform;
+    }
+
+    public void Initialize(Unit unit)
+    {
+        _collider = GetComponent<BoxCollider>();
+        Unit = unit;
     }
 
     private void OnMouseDown()
