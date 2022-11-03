@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -10,8 +9,14 @@ public class UIManager : MonoBehaviour
 
     public Transform buildingMenu;
     public GameObject buildingButtonPrefab;
+
     public Transform resourcesUIParent;
     public GameObject gameResourcesDisplayPrefab;
+
+    public Transform selectedUnitsListParent;
+    public GameObject selectedUnitDisplayPrefab;
+
+    public Transform selectionGroupsParent;
 
     private Dictionary<string, TextMeshProUGUI> _resourceTexts;
     private Dictionary<string, Button> _buildingButtons;
@@ -19,9 +24,15 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         _buildingPlacer = GetComponent<BuildingPlacer>();
-
         InitResources();
         InitBuildingButtons();
+        for (int i = 1; i <= 9; i++)
+            ToggleSelectionGroupButton(i, false);
+    }
+
+    public void ToggleSelectionGroupButton(int groupIndex, bool on)
+    {
+        selectionGroupsParent.Find(groupIndex.ToString()).gameObject.SetActive(on);
     }
 
     private void InitResources()
@@ -53,7 +64,7 @@ public class UIManager : MonoBehaviour
             button.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = data.unitName;
             _buildingButtons[data.code] = b;
 
-            _AddBuildingButtonListener(b, i);
+            AddBuildingButtonListener(b, i);
 
             if (!Globals.BUILDING_DATA[i].CanBuy())
             {
@@ -68,12 +79,16 @@ public class UIManager : MonoBehaviour
     {
         EventManager.AddListener("UpdateResourceTexts", OnUpdateResourceTexts);
         EventManager.AddListener("CheckBuildingButtons", OnCheckBuildingButtons);
+        EventManager.AddTypedListener("SelectUnit", OnSelectUnit);
+        EventManager.AddTypedListener("DeselectUnit", OnDeselectUnit);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveListener("UpdateResourceTexts", OnUpdateResourceTexts);
         EventManager.RemoveListener("CheckBuildingButtons", OnCheckBuildingButtons);
+        EventManager.RemoveTypedListener("SelectUnit", OnSelectUnit);
+        EventManager.RemoveTypedListener("DeselectUnit", OnDeselectUnit);
     }
 
     private void OnUpdateResourceTexts()
@@ -93,8 +108,51 @@ public class UIManager : MonoBehaviour
             _buildingButtons[data.code].interactable = data.CanBuy();
     }
 
-    private void _AddBuildingButtonListener(Button b, int i)
+    private void AddBuildingButtonListener(Button b, int i)
     {
         b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
+    }
+
+    private void OnSelectUnit(CustomEventData data)
+    {
+        AddSelectedUnitToUIList(data.unit);
+    }
+
+    private void OnDeselectUnit(CustomEventData data)
+    {
+        RemoveSelectedUnitFromUIList(data.unit.Code);
+    }
+
+    public void AddSelectedUnitToUIList(Unit unit)
+    {
+        Transform alreadyInstantiatedChild = selectedUnitsListParent.Find(unit.Code);
+        if (alreadyInstantiatedChild != null)
+        {
+            TextMeshProUGUI t = alreadyInstantiatedChild.Find("Count").GetComponent<TextMeshProUGUI>();
+            int count = int.Parse(t.text);
+            t.text = (count + 1).ToString();
+        }
+        else
+        {
+            GameObject g = GameObject.Instantiate(
+                selectedUnitDisplayPrefab, selectedUnitsListParent);
+            g.name = unit.Code;
+            Transform t = g.transform;
+            t.Find("Count").GetComponent<TextMeshProUGUI>().text = "1";
+            t.Find("Name").GetComponent<TextMeshProUGUI>().text = unit.Data.unitName;
+        }
+    }
+
+    public void RemoveSelectedUnitFromUIList(string code)
+    {
+        Transform listItem = selectedUnitsListParent.Find(code);
+        if (listItem == null) return;
+        TextMeshProUGUI t = listItem.Find("Count").GetComponent<TextMeshProUGUI>();
+        int count = int.Parse(t.text);
+        count -= 1;
+        if (count == 0)
+            DestroyImmediate(listItem.gameObject);
+        else
+            t.text = count.ToString();
     }
 }

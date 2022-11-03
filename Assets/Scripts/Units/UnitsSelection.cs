@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class UnitsSelection : MonoBehaviour
 {
+    public UIManager uiManager;
+
     private bool _isDraggingMouseBox = false;
     private Vector3 _dragStartPosition;
 
     private Ray _ray;
     private RaycastHit _raycastHit;
+
+    private Dictionary<int, List<UnitManager>> _selectionGroups = new Dictionary<int, List<UnitManager>>();
 
     private void Update()
     {
@@ -41,6 +45,55 @@ public class UnitsSelection : MonoBehaviour
                 }
             }
         }
+
+        if (Input.anyKeyDown)
+        {
+            int alphaKey = Utils.GetAlphaKeyValue(Input.inputString);
+            if (alphaKey != -1)
+            {
+                if (
+                    Input.GetKey(KeyCode.X) ||
+                    Input.GetKey(KeyCode.RightControl) ||
+                    Input.GetKey(KeyCode.LeftApple) ||
+                    Input.GetKey(KeyCode.RightApple)
+                )
+                    _CreateSelectionGroup(alphaKey);
+                else
+                    _ReselectGroup(alphaKey);
+            }
+        }
+    }
+
+    public void SelectUnitsGroup(int groupIndex)
+    {
+        _ReselectGroup(groupIndex);
+    }
+
+    private void _CreateSelectionGroup(int groupIndex)
+    {
+        if (Globals.SELECTED_UNITS.Count == 0)
+        {
+            if (_selectionGroups.ContainsKey(groupIndex))
+                _RemoveSelectionGroup(groupIndex);
+            return;
+        }
+        List<UnitManager> groupUnits = new(Globals.SELECTED_UNITS);
+        _selectionGroups[groupIndex] = groupUnits;
+        uiManager.ToggleSelectionGroupButton(groupIndex, true);
+    }
+
+    private void _RemoveSelectionGroup(int groupIndex)
+    {
+        _selectionGroups.Remove(groupIndex);
+        uiManager.ToggleSelectionGroupButton(groupIndex, false);
+    }
+
+    private void _ReselectGroup(int groupIndex)
+    {
+        if (!_selectionGroups.ContainsKey(groupIndex)) return;
+        _DeselectAllUnits();
+        foreach (UnitManager um in _selectionGroups[groupIndex])
+            um.Select();
     }
 
     private void _DeselectAllUnits()
