@@ -6,7 +6,7 @@ public class BuildingManager : UnitManager
     private Structure _building = null;
     private int _nCollisions = 0;
 
-    protected override Unit Unit
+    public override Unit Unit
     {
         get { return _building; }
         set { _building = value is Structure ? (Structure)value : null; }
