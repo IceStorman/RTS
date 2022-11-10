@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Photon.Pun;
 
 public class BuildingPlacer : MonoBehaviour
 {
@@ -75,6 +76,7 @@ public class BuildingPlacer : MonoBehaviour
         _lastPlacementPosition = Vector3.zero;
     }
 
+    [PunRPC]
     private void _PlaceBuilding()
     {
         _placedStructure.Place();
@@ -84,6 +86,7 @@ public class BuildingPlacer : MonoBehaviour
             _placedStructure = null;
         EventManager.TriggerEvent("UpdateResourceTexts");
         EventManager.TriggerEvent("CheckBuildingButtons");
+        Debug.Log("Completed");
     }
 
     private void _CancelPlacedBuilding()

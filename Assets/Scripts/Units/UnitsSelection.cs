@@ -57,7 +57,9 @@ public class UnitsSelection : MonoBehaviour
                     Input.GetKey(KeyCode.LeftApple) ||
                     Input.GetKey(KeyCode.RightApple)
                 )
+                {
                     _CreateSelectionGroup(alphaKey);
+                }
                 else
                     _ReselectGroup(alphaKey);
             }
