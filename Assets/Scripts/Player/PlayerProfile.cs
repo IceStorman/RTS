@@ -1,11 +1,13 @@
 using Photon.Realtime;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class PlayerProfile
 {
-    private string nickName;
-    public Sprite avatar;
+    public Player Player { get; private set; }
 
-    public string NickName { get => nickName ?? "Player"; set => nickName = value; }
+    public void SetPlayerInfo(Player player)
+    {
+        this.Player = player;
+    }
 }

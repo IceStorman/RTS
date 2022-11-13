@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6769410870710761121}
   - component: {fileID: 5647457287156149101}
   m_Layer: 5
-  m_Name: Nickname
+  m_Name: NickName
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Player
+  m_text: '-'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 8997484249222453040}
   - component: {fileID: 5938410438640912159}
   m_Layer: 5
-  m_Name: PlayerMenuDisplay
+  m_Name: PlayerInfoDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

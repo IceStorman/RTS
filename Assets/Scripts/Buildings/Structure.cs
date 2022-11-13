@@ -32,7 +32,10 @@ public class Structure : Unit
         SetMaterials();
     }
 
+    [PunRPC]
     public void SetMaterials() { SetMaterials(_placement); }
+
+    [PunRPC]
     public void SetMaterials(BuildingPlacement placement)
     {
         List<Material> materials;

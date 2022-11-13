@@ -56,10 +56,12 @@ public class BuildingPlacer : MonoBehaviour
             Input.GetMouseButtonDown(0) &&
             !EventSystem.current.IsPointerOverGameObject())
         {
-            _PlaceBuilding();
+            EventManager.photonView.RPC("_PlaceBuilding", RpcTarget.AllBuffered);
+            //_PlaceBuilding();
         }
     }
 
+    [PunRPC]
     private void _PreparePlacedBuilding(int buildingDataIndex)
     {
         if (_placedStructure != null && !_placedStructure.IsFixed)
@@ -81,7 +83,8 @@ public class BuildingPlacer : MonoBehaviour
     {
         _placedStructure.Place();
         if (_placedStructure.CanBuy())
-            _PreparePlacedBuilding(_placedStructure.DataIndex);
+            EventManager.photonView.RPC("_PreparePlacedBuilding", RpcTarget.AllBuffered, _placedStructure.DataIndex);
+        //_PreparePlacedBuilding(_placedStructure.DataIndex);
         else
             _placedStructure = null;
         EventManager.TriggerEvent("UpdateResourceTexts");

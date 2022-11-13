@@ -42,6 +42,10 @@ MonoBehaviour:
   - RPC_SendTimer
   - _PlaceBuilding
   - TestButton
+  - SetPlayerInfoPrefab
+  - RPC_SetPlayerInfoPrefab
+  - _PreparePlacedBuilding
+  - SetMaterials
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
