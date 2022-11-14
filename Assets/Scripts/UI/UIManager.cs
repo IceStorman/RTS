@@ -164,10 +164,13 @@ public class UIManager : MonoBehaviour
 
     private void _SetSelectedUnitMenu(Unit unit)
     {
-        int contentHeight = 60 + unit.Production.Count * 16;
+        int contentHeight = 120 + unit.Production.Count * 16;
+
         _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
-        _selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, -contentHeight - 20);
-        _selectedUnitButtonsRectTransform.sizeDelta = new Vector2(70, Screen.height - contentHeight - 20);
+
+        _selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, 0);
+        _selectedUnitButtonsRectTransform.sizeDelta = new Vector2(0, Screen.height - contentHeight);
+
         _selectedUnitTitleText.text = unit.Data.unitName;
         _selectedUnitLevelText.text = $"Level {unit.Level}";
         foreach (Transform child in _selectedUnitResourcesProductionParent)
