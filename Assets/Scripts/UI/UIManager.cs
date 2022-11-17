@@ -24,6 +24,9 @@ public class UIManager : MonoBehaviour
     private Transform _selectedUnitResourcesProductionParent;
     private Transform _selectedUnitActionButtonsParent;
 
+    private Unit _selectedUnit;
+    public GameObject unitSkillButtonPrefab;
+
     public Transform selectionGroupsParent;
 
     private Dictionary<string, TextMeshProUGUI> _resourceTexts;
@@ -143,6 +146,7 @@ public class UIManager : MonoBehaviour
 
     private void AddBuildingButtonListener(Button b, int i)
     {
+        
         b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
     }
 
@@ -164,6 +168,15 @@ public class UIManager : MonoBehaviour
 
     private void _SetSelectedUnitMenu(Unit unit)
     {
+        _selectedUnit = unit;
+        
+        SetSelectedUnitMenuUI(_selectedUnit);
+        SetUnitProduction(_selectedUnit);
+        SetSkillButtons(_selectedUnit);
+    }
+    
+    private void SetSelectedUnitMenuUI(Unit unit)
+    {
         int contentHeight = 120 + unit.Production.Count * 16;
 
         _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
@@ -173,20 +186,46 @@ public class UIManager : MonoBehaviour
 
         _selectedUnitTitleText.text = unit.Data.unitName;
         _selectedUnitLevelText.text = $"Level {unit.Level}";
+    }
+
+    public void SetUnitProduction(Unit unit)
+    {
         foreach (Transform child in _selectedUnitResourcesProductionParent)
             Destroy(child.gameObject);
-        if (unit.Production.Count > 0)
+        
+        if (unit.Production.Count <= 0) return;
+        foreach (ResourceValue resource in unit.Production)
         {
-            GameObject g; Transform t;
-            foreach (ResourceValue resource in unit.Production)
-            {
-                g = GameObject.Instantiate(
-                    gameResourceCostPrefab, _selectedUnitResourcesProductionParent);
-                t = g.transform;
-                t.Find("Text").GetComponent<TextMeshProUGUI>().text = $"+{resource.amount}";
-                t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
-            }
+            GameObject g = GameObject.Instantiate(
+                gameResourceCostPrefab, _selectedUnitResourcesProductionParent);
+            Transform t = g.transform;
+            t.Find("Text").GetComponent<TextMeshProUGUI>().text = $"+{resource.amount}";
+            t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
         }
+    }
+
+    private void SetSkillButtons(Unit unit)
+    {
+        foreach (Transform child in _selectedUnitActionButtonsParent)
+            Destroy(child.gameObject);
+        
+        if (unit.SkillManagers.Count <= 0) return;
+        for (int i = 0; i < unit.SkillManagers.Count; i++)
+        {
+            GameObject g = GameObject.Instantiate(
+                unitSkillButtonPrefab, _selectedUnitActionButtonsParent);
+            Transform t = g.transform;
+            Button b = g.GetComponent<Button>();
+            unit.SkillManagers[i].SetButton(b);
+            t.Find("Text").GetComponent<TextMeshProUGUI>().text =
+                unit.SkillManagers[i].skill.skillName;
+            _AddUnitSkillButtonListener(b, i);
+        }
+    }
+    
+    private void _AddUnitSkillButtonListener(Button b, int i)
+    {
+        b.onClick.AddListener(() => _selectedUnit.TriggerSkill(i));
     }
 
     private void _ShowSelectedUnitMenu(bool show)

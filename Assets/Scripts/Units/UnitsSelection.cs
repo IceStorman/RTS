@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitsSelection : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class UnitsSelection : MonoBehaviour
 
     private void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+        
         if (Input.GetMouseButtonDown(0))
         {
             _isDraggingMouseBox = true;
@@ -46,24 +49,20 @@ public class UnitsSelection : MonoBehaviour
             }
         }
 
-        if (Input.anyKeyDown)
+        if (!Input.anyKeyDown) return;
+        int alphaKey = Utils.GetAlphaKeyValue(Input.inputString);
+        if (alphaKey == -1) return;
+        if (
+            Input.GetKey(KeyCode.X) ||
+            Input.GetKey(KeyCode.RightControl) ||
+            Input.GetKey(KeyCode.LeftApple) ||
+            Input.GetKey(KeyCode.RightApple)
+        )
         {
-            int alphaKey = Utils.GetAlphaKeyValue(Input.inputString);
-            if (alphaKey != -1)
-            {
-                if (
-                    Input.GetKey(KeyCode.X) ||
-                    Input.GetKey(KeyCode.RightControl) ||
-                    Input.GetKey(KeyCode.LeftApple) ||
-                    Input.GetKey(KeyCode.RightApple)
-                )
-                {
-                    _CreateSelectionGroup(alphaKey);
-                }
-                else
-                    _ReselectGroup(alphaKey);
-            }
+            _CreateSelectionGroup(alphaKey);
         }
+        else
+            _ReselectGroup(alphaKey);
     }
 
     public void SelectUnitsGroup(int groupIndex)

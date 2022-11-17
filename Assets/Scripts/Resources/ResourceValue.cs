@@ -1,7 +1,7 @@
 [System.Serializable]
 public class ResourceValue
 {
-    public string code = "";
+    public string code;
     public int amount = 0;
 
     public ResourceValue(string code, int amount)
