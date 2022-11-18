@@ -26,14 +26,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3782981097379120359}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 8, z: 4}
+  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 3, y: 6, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4678598926319911880}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!33 &1032046909588117475
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -122,7 +122,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4826056478263506253}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -143,7 +143,7 @@ Projector:
   m_FieldOfView: 60
   m_AspectRatio: 1
   m_Orthographic: 1
-  m_OrthographicSize: 1
+  m_OrthographicSize: 4
   m_Material: {fileID: 2100000, guid: 6843ef4c01c7a0b45a2c0d3c7096a1fc, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
@@ -208,8 +208,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 8, z: 4}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3, y: 6, z: 3}
+  m_Center: {x: 0, y: 3, z: 0}
 --- !u!54 &-3941836430605075008
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -38,7 +38,7 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         ShowInfoPanel(true);
     }
 
-    private void OnUnhoverBuildingButton()
+    private void OnUnHoverBuildingButton()
     {
         ShowInfoPanel(false);
     }
@@ -50,7 +50,7 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        OnUnhoverBuildingButton();
+        OnUnHoverBuildingButton();
     }
 
     public void SetInfoPanel(BuildingData data)
