@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class EntityManager : MonoBehaviour
 {
     public GameObject selectionCircle;
 
@@ -10,17 +10,17 @@ public class UnitManager : MonoBehaviour
     private GameObject _healthbar;
 
     protected BoxCollider _collider;
-    public virtual Unit Unit { get; set; }
+    public virtual Entity Entity { get; set; }
 
     private void Awake()
     {
         _canvas = GameObject.Find("Canvas").transform;
     }
 
-    public void Initialize(Unit unit)
+    public void Initialize(Entity entity)
     {
         _collider = GetComponent<BoxCollider>();
-        Unit = unit;
+        Entity = entity;
     }
 
     private void OnMouseDown()
@@ -58,7 +58,7 @@ public class UnitManager : MonoBehaviour
             h.Initialize(transform, boundingBox.height);
             h.SetPosition();
         }
-        EventManager.TriggerTypedEvent("SelectUnit", new CustomEventData(Unit));
+        EventManager.TriggerTypedEvent("SelectUnit", new CustomEventData(Entity));
     }
 
     public void Select() => Select(false, false);
@@ -73,8 +73,8 @@ public class UnitManager : MonoBehaviour
 
         if (!holdingShift)
         {
-            List<UnitManager> selectedUnits = new List<UnitManager>(Globals.SELECTED_UNITS);
-            foreach (UnitManager um in selectedUnits)
+            List<EntityManager> selectedUnits = new List<EntityManager>(Globals.SELECTED_UNITS);
+            foreach (EntityManager um in selectedUnits)
                 um.Deselect();
             _SelectUtil();
         }
@@ -94,6 +94,6 @@ public class UnitManager : MonoBehaviour
         selectionCircle.SetActive(false);
         Destroy(_healthbar);
         _healthbar = null;
-        EventManager.TriggerTypedEvent("DeselectUnit", new CustomEventData(Unit));
+        EventManager.TriggerTypedEvent("DeselectUnit", new CustomEventData(Entity));
     }
 }

@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
     private Transform _selectedUnitResourcesProductionParent;
     private Transform _selectedUnitActionButtonsParent;
 
-    private Unit _selectedUnit;
+    private Entity selectedEntity;
     public GameObject unitSkillButtonPrefab;
 
     public Transform selectionGroupsParent;
@@ -146,55 +146,54 @@ public class UIManager : MonoBehaviour
 
     private void AddBuildingButtonListener(Button b, int i)
     {
-        
         b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
     }
 
     private void OnSelectUnit(CustomEventData data)
     {
-        AddSelectedUnitToUIList(data.unit);
-        _SetSelectedUnitMenu(data.unit);
+        AddSelectedUnitToUIList(data.Entity);
+        _SetSelectedUnitMenu(data.Entity);
         _ShowSelectedUnitMenu(true);
     }
 
     private void OnDeselectUnit(CustomEventData data)
     {
-        RemoveSelectedUnitFromUIList(data.unit.Code);
+        RemoveSelectedUnitFromUIList(data.Entity.Code);
         if (Globals.SELECTED_UNITS.Count == 0)
             _ShowSelectedUnitMenu(false);
         else
-            _SetSelectedUnitMenu(Globals.SELECTED_UNITS[^1].Unit);
+            _SetSelectedUnitMenu(Globals.SELECTED_UNITS[^1].Entity);
     }
 
-    private void _SetSelectedUnitMenu(Unit unit)
+    private void _SetSelectedUnitMenu(Entity entity)
     {
-        _selectedUnit = unit;
+        selectedEntity = entity;
         
-        SetSelectedUnitMenuUI(_selectedUnit);
-        SetUnitProduction(_selectedUnit);
-        SetSkillButtons(_selectedUnit);
+        SetSelectedUnitMenuUI(selectedEntity);
+        SetUnitProduction(selectedEntity);
+        SetSkillButtons(selectedEntity);
     }
     
-    private void SetSelectedUnitMenuUI(Unit unit)
+    private void SetSelectedUnitMenuUI(Entity entity)
     {
-        int contentHeight = 120 + unit.Production.Count * 16;
+        int contentHeight = 120 + entity.Production.Count * 16;
 
         _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
 
         _selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, 0);
         _selectedUnitButtonsRectTransform.sizeDelta = new Vector2(0, Screen.height - contentHeight);
 
-        _selectedUnitTitleText.text = unit.Data.unitName;
-        _selectedUnitLevelText.text = $"Level {unit.Level}";
+        _selectedUnitTitleText.text = entity.Data.unitName;
+        _selectedUnitLevelText.text = $"Level {entity.Level}";
     }
 
-    public void SetUnitProduction(Unit unit)
+    public void SetUnitProduction(Entity entity)
     {
         foreach (Transform child in _selectedUnitResourcesProductionParent)
             Destroy(child.gameObject);
         
-        if (unit.Production.Count <= 0) return;
-        foreach (ResourceValue resource in unit.Production)
+        if (entity.Production.Count <= 0) return;
+        foreach (ResourceValue resource in entity.Production)
         {
             GameObject g = GameObject.Instantiate(
                 gameResourceCostPrefab, _selectedUnitResourcesProductionParent);
@@ -204,28 +203,28 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void SetSkillButtons(Unit unit)
+    private void SetSkillButtons(Entity entity)
     {
         foreach (Transform child in _selectedUnitActionButtonsParent)
             Destroy(child.gameObject);
         
-        if (unit.SkillManagers.Count <= 0) return;
-        for (int i = 0; i < unit.SkillManagers.Count; i++)
+        if (entity.SkillManagers.Count <= 0) return;
+        for (int i = 0; i < entity.SkillManagers.Count; i++)
         {
             GameObject g = GameObject.Instantiate(
                 unitSkillButtonPrefab, _selectedUnitActionButtonsParent);
             Transform t = g.transform;
             Button b = g.GetComponent<Button>();
-            unit.SkillManagers[i].SetButton(b);
+            entity.SkillManagers[i].SetButton(b);
             t.Find("Text").GetComponent<TextMeshProUGUI>().text =
-                unit.SkillManagers[i].skill.skillName;
+                entity.SkillManagers[i].skill.skillName;
             _AddUnitSkillButtonListener(b, i);
         }
     }
     
     private void _AddUnitSkillButtonListener(Button b, int i)
     {
-        b.onClick.AddListener(() => _selectedUnit.TriggerSkill(i));
+        b.onClick.AddListener(() => selectedEntity.TriggerSkill(i));
     }
 
     private void _ShowSelectedUnitMenu(bool show)
@@ -233,9 +232,9 @@ public class UIManager : MonoBehaviour
         selectedUnitMenu.SetActive(show);
     }
 
-    public void AddSelectedUnitToUIList(Unit unit)
+    public void AddSelectedUnitToUIList(Entity entity)
     {
-        Transform alreadyInstantiatedChild = selectedUnitsListParent.Find(unit.Code);
+        Transform alreadyInstantiatedChild = selectedUnitsListParent.Find(entity.Code);
         if (alreadyInstantiatedChild != null)
         {
             TextMeshProUGUI t = alreadyInstantiatedChild.Find("Count").GetComponent<TextMeshProUGUI>();
@@ -246,10 +245,10 @@ public class UIManager : MonoBehaviour
         {
             GameObject g = GameObject.Instantiate(
                 selectedUnitDisplayPrefab, selectedUnitsListParent);
-            g.name = unit.Code;
+            g.name = entity.Code;
             Transform t = g.transform;
             t.Find("Count").GetComponent<TextMeshProUGUI>().text = "1";
-            t.Find("Name").GetComponent<TextMeshProUGUI>().text = unit.Data.unitName;
+            t.Find("Name").GetComponent<TextMeshProUGUI>().text = entity.Data.unitName;
         }
     }
 

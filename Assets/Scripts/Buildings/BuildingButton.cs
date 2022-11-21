@@ -34,7 +34,7 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void OnHoverBuildingButton(CustomEventData data)
     {
-        SetInfoPanel((BuildingData)data.unitData);
+        SetInfoPanel((BuildingData)data.EntityData);
         ShowInfoPanel(true);
     }
 

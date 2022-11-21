@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: -2037879203478454108}
   m_Layer: 0
   m_Name: Tower
-  m_TagString: Unit
+  m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

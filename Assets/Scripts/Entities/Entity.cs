@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Unit
+public class Entity
 {
-    protected UnitData _data;
+    protected EntityData _data;
     protected Transform _transform;
     protected int _currentHealth;
     protected string _uid;
@@ -12,9 +12,9 @@ public class Unit
     protected List<ResourceValue> _production;
     protected List<SkillManager> _skillManagers;
 
-    public Unit(UnitData data) : this(data, new List<ResourceValue>()) { }
+    public Entity(EntityData data) : this(data, new List<ResourceValue>()) { }
 
-    public Unit(UnitData data, List<ResourceValue> production)
+    public Entity(EntityData data, List<ResourceValue> production)
     {
         _data = data;
         _currentHealth = data.healthpoints;
@@ -71,7 +71,7 @@ public class Unit
         _skillManagers[index].Trigger(target);
     }
 
-    public UnitData Data { get => _data; }
+    public EntityData Data { get => _data; }
     public string Code { get => _data.code; }
     public Transform Transform { get => _transform; }
     public int HP { get => _currentHealth; set => _currentHealth = value; }

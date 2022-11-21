@@ -1,18 +1,18 @@
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class BuildingManager : UnitManager
+public class BuildingManager : EntityManager
 {
-    private Structure _building = null;
+    private Building _building = null;
     private int _nCollisions = 0;
 
-    public override Unit Unit
+    public override Entity Entity
     {
         get { return _building; }
-        set { _building = value is Structure ? (Structure)value : null; }
+        set { _building = value is Building ? (Building)value : null; }
     }
 
-    public void Initialize(Structure building)
+    public void Initialize(Building building)
     {
         _collider = GetComponent<BoxCollider>();
         _building = building;

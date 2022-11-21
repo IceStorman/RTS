@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UnitsSelection : MonoBehaviour
+public class EntitiesSelection : MonoBehaviour
 {
     public UIManager uiManager;
 
@@ -12,7 +12,7 @@ public class UnitsSelection : MonoBehaviour
     private Ray _ray;
     private RaycastHit _raycastHit;
 
-    private Dictionary<int, List<UnitManager>> _selectionGroups = new Dictionary<int, List<UnitManager>>();
+    private Dictionary<int, List<EntityManager>> _selectionGroups = new Dictionary<int, List<EntityManager>>();
 
     private void Update()
     {
@@ -78,7 +78,7 @@ public class UnitsSelection : MonoBehaviour
                 _RemoveSelectionGroup(groupIndex);
             return;
         }
-        List<UnitManager> groupUnits = new(Globals.SELECTED_UNITS);
+        List<EntityManager> groupUnits = new(Globals.SELECTED_UNITS);
         _selectionGroups[groupIndex] = groupUnits;
         uiManager.ToggleSelectionGroupButton(groupIndex, true);
     }
@@ -93,14 +93,14 @@ public class UnitsSelection : MonoBehaviour
     {
         if (!_selectionGroups.ContainsKey(groupIndex)) return;
         _DeselectAllUnits();
-        foreach (UnitManager um in _selectionGroups[groupIndex])
+        foreach (EntityManager um in _selectionGroups[groupIndex])
             um.Select();
     }
 
     private void _DeselectAllUnits()
     {
-        List<UnitManager> selectedUnits = new List<UnitManager>(Globals.SELECTED_UNITS);
-        foreach (UnitManager um in selectedUnits)
+        List<EntityManager> selectedUnits = new List<EntityManager>(Globals.SELECTED_UNITS);
+        foreach (EntityManager um in selectedUnits)
             um.Deselect();
     }
 
@@ -111,7 +111,7 @@ public class UnitsSelection : MonoBehaviour
             _dragStartPosition,
             Input.mousePosition
         );
-        GameObject[] selectableUnits = GameObject.FindGameObjectsWithTag("Unit");
+        GameObject[] selectableUnits = GameObject.FindGameObjectsWithTag("Entity");
         bool inBounds;
         foreach (GameObject unit in selectableUnits)
         {
@@ -119,9 +119,9 @@ public class UnitsSelection : MonoBehaviour
                 Camera.main.WorldToViewportPoint(unit.transform.position)
             );
             if (inBounds)
-                unit.GetComponent<UnitManager>().Select();
+                unit.GetComponent<EntityManager>().Select();
             else
-                unit.GetComponent<UnitManager>().Deselect();
+                unit.GetComponent<EntityManager>().Deselect();
         }
     }
 

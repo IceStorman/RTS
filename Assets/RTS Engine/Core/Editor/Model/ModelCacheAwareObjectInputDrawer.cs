@@ -131,7 +131,7 @@ namespace RTSEngine.EditorOnly.Model
                 return;
             }
 
-            entity = (lastObj != null ? lastObj : newObj).gameObject.GetComponentInParent<Entity>();
+            entity = (lastObj != null ? lastObj : newObj).gameObject.GetComponentInParent<RTSEngine.Entities.Entity>();
             if (!entity.IsValid())
             {
                 //Debug.LogError($"[RTSEditorHelper] The Model Cache Aware Object Input field can only be used on components attached to an entity or its children objects while in prefab mode!");

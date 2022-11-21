@@ -2,15 +2,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Photon.Pun;
 
-public class BuildingPlacer : MonoBehaviour
+public class BuildingPlacer : MonoBehaviourPunCallbacks
 {
-    private UIManager _uiManager;
+    private Building placedBuilding;
 
-    private Structure _placedStructure = null;
-
-    private Ray _ray;
-    private RaycastHit _raycastHit;
-    private Vector3 _lastPlacementPosition;
+    private Ray ray;
+    private RaycastHit raycastHit;
+    private Vector3 lastPlacementPosition;
 
     public void SelectPlacedBuilding(int buildingIndex)
     {
@@ -19,82 +17,86 @@ public class BuildingPlacer : MonoBehaviour
 
     private void Awake()
     {
-        _uiManager = GetComponent<UIManager>();
+        photonView.GetComponent<PhotonView>();
     }
 
     private void Update()
     {
-        if(_placedStructure != null)
+        if(placedBuilding != null && Input.GetKeyUp(KeyCode.Escape))
         {
-            if (Input.GetKeyUp(KeyCode.Escape))
-            {
-                _CancelPlacedBuilding();
-                return;
-            }
+            _CancelPlacedBuilding();
+            return;
         }
 
-        _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        TrySetBuildingPosition();
 
-        if (_placedStructure != null &&
-            Physics.Raycast(
-            _ray,
-            out _raycastHit,
-            1000f,
-            Globals.TERRAIN_LAYER_MASK
-        ))
-        {
-            _placedStructure.SetPosition(_raycastHit.point);
-            if (_lastPlacementPosition != _raycastHit.point)
-            {
-                _placedStructure.CheckValidPlacement();
-            }
-            _lastPlacementPosition = _raycastHit.point;
-        }
-
-        if (_placedStructure != null && 
-            _placedStructure.HasValidPlacement &&
-            Input.GetMouseButtonDown(0) &&
-            !EventSystem.current.IsPointerOverGameObject())
-        {
-            EventManager.photonView.RPC("_PlaceBuilding", RpcTarget.AllBuffered);
-            //_PlaceBuilding();
-        }
+        TryPlaceBuilding();
     }
 
-    [PunRPC]
+    private void TryPlaceBuilding()
+    {
+        if (CanPlaceBuilding())
+        {
+            _PlaceBuilding();
+        }
+    }
+    
+    private void TrySetBuildingPosition()
+    {
+        if (Camera.main != null) ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (placedBuilding == null ||
+            !Physics.Raycast(ray, out raycastHit, 1000f, Globals.TERRAIN_LAYER_MASK)) return;
+        
+        placedBuilding.SetPosition(raycastHit.point);
+        if (lastPlacementPosition != raycastHit.point)
+        {
+            placedBuilding.CheckValidPlacement();
+        }
+        lastPlacementPosition = raycastHit.point;
+    }
+    
+    private bool CanPlaceBuilding()
+        => placedBuilding is { HasValidPlacement: true } &&
+           Input.GetMouseButtonDown(0) &&
+           !EventSystem.current.IsPointerOverGameObject();
+    
     private void _PreparePlacedBuilding(int buildingDataIndex)
     {
-        if (_placedStructure != null && !_placedStructure.IsFixed)
+        if (placedBuilding is {IsFixed: false})
         {
-            Destroy(_placedStructure.Transform.gameObject);
+            Destroy(placedBuilding.Transform.gameObject);
         }
 
-        Structure building = new Structure(
+        Building building = new Building(
             Globals.BUILDING_DATA[buildingDataIndex]
         );
 
         building.Transform.GetComponent<BuildingManager>().Initialize(building);
-        _placedStructure = building;
-        _lastPlacementPosition = Vector3.zero;
+        placedBuilding = building;
+        lastPlacementPosition = Vector3.zero;
     }
-
-    [PunRPC]
+    
     private void _PlaceBuilding()
     {
-        _placedStructure.Place();
-        if (_placedStructure.CanBuy())
-            EventManager.photonView.RPC("_PreparePlacedBuilding", RpcTarget.AllBuffered, _placedStructure.DataIndex);
-        //_PreparePlacedBuilding(_placedStructure.DataIndex);
+        photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered);
+        
+        if (placedBuilding.CanBuy())
+            _PreparePlacedBuilding(placedBuilding.DataIndex);
         else
-            _placedStructure = null;
+            placedBuilding = null;
         EventManager.TriggerEvent("UpdateResourceTexts");
         EventManager.TriggerEvent("CheckBuildingButtons");
         Debug.Log("Completed");
     }
 
+    [PunRPC]
+    private void RPC_PlaceBuilding()
+        => placedBuilding.Place();
+
     private void _CancelPlacedBuilding()
     {
-        Destroy(_placedStructure.Transform.gameObject);
-        _placedStructure = null;
+        Destroy(placedBuilding.Transform.gameObject);
+        placedBuilding = null;
     }
 }

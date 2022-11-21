@@ -46,8 +46,8 @@ namespace RTSEngine.EditorOnly
         {
             Source = source;
             IsCreationInstance = isCreationInstance;
-            SerializedObj = Source is Entity 
-                ? new SerializedObject(Source as Entity)
+            SerializedObj = Source is RTSEngine.Entities.Entity 
+                ? new SerializedObject(Source as RTSEngine.Entities.Entity)
                 : (Source is StaticBuilding ? new SerializedObject(Source as StaticBuilding) : null);
         }
 
@@ -70,11 +70,11 @@ namespace RTSEngine.EditorOnly
 
                 List<SerializedProperty> props = new List<SerializedProperty>();
 
-                if (Source is Entity)
+                if (Source is RTSEngine.Entities.Entity)
                     props.Add(SerializedObj.FindProperty("_name"));
                 props.Add(SerializedObj.FindProperty("code"));
                 props.Add(SerializedObj.FindProperty("category"));
-                if (Source is Entity)
+                if (Source is RTSEngine.Entities.Entity)
                 {
                     props.Add(SerializedObj.FindProperty("description"));
                     props.Add(SerializedObj.FindProperty("icon"));
@@ -478,7 +478,7 @@ namespace RTSEngine.EditorOnly
             GameObject cloneInstance = (GameObject)PrefabUtility.InstantiatePrefab(ItemSource.Obj);
             IEntity cloneEntity = cloneInstance.GetComponent<IEntity>();
 
-            SerializedObject cloneSO = new SerializedObject(cloneEntity as Entity);
+            SerializedObject cloneSO = new SerializedObject(cloneEntity as RTSEngine.Entities.Entity);
             cloneSO.Update();
             var EntityCodes = RTSEditorHelper.GetEntities().Values.Select(entity => entity.Code).ToArray();
             string nextCode = ObjectNames.GetUniqueName(EntityCodes, cloneEntity.Code);
@@ -561,7 +561,7 @@ namespace RTSEngine.EditorOnly
             IEntity newEntity = newEntityObj.GetComponent<IEntity>();
             ItemSource = new EntityItemSource<IEntity>(newEntity, isCreationInstance: true);
 
-            SerializedObject newEntitySO = new SerializedObject(newEntity as Entity);
+            SerializedObject newEntitySO = new SerializedObject(newEntity as RTSEngine.Entities.Entity);
             newEntitySO.Update();
             var EntityCodes = RTSEditorHelper.GetEntities().Values.Select(entity => entity.Code).ToArray();
             string nextCode = ObjectNames.GetUniqueName(EntityCodes, newEntity.Code);

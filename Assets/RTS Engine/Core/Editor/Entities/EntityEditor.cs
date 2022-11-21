@@ -21,8 +21,8 @@ namespace RTSEngine.EditorOnly.Entities
         }
     }
 
-    [CustomEditor(typeof(Building))]
-    public class BuildingEditor : EntityEditor<Building>
+    [CustomEditor(typeof(RTSEngine.Entities.Building))]
+    public class BuildingEditor : EntityEditor<RTSEngine.Entities.Building>
     {
         private string[][] toolbars = new string[][] {
             new string[] { "Entity", "Faction Entity", "Building" }
@@ -60,7 +60,7 @@ namespace RTSEngine.EditorOnly.Entities
         }
     }
 
-    public class EntityEditor<T> : TabsEditorBase<T> where T : Entity
+    public class EntityEditor<T> : TabsEditorBase<T> where T : RTSEngine.Entities.Entity
     {
         protected override Int2D tabID {
             get => comp.tabID;

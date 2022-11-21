@@ -19,7 +19,7 @@ namespace RTSEngine.Model
         protected int indexKey = -1;
 
         [SerializeField, ReadOnly, FormerlySerializedAs("EntityModel")]
-        private Entity entity = null;
+        private Entities.Entity entity = null;
         public IEntityModel EntityModel
         {
             get

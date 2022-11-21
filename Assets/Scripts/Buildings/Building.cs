@@ -10,15 +10,15 @@ public enum BuildingPlacement
     FIXED
 }
 
-public class Structure : Unit
+public class Building : Entity
 {
     private BuildingManager _buildingManager;
     private BuildingPlacement _placement;
     private List<Material> _materials;
 
-    public Structure(BuildingData data) : this(data, new List<ResourceValue>()) { }
+    public Building(BuildingData data) : this(data, new List<ResourceValue>()) { }
 
-    public Structure(BuildingData data, List<ResourceValue> production) : 
+    public Building(BuildingData data, List<ResourceValue> production) : 
         base(data, production)
     {
         _buildingManager = _transform.GetComponent<BuildingManager>();

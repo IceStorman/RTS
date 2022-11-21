@@ -1,4 +1,6 @@
 using UnityEngine;
+using Photon.Pun;
+using UnityEngine.Serialization;
 
 public enum SkillType
 {
@@ -12,7 +14,7 @@ public class SkillData : ScriptableObject
     public string skillName;
     public string description;
     public SkillType type;
-    public UnitData unitReference;
+    [FormerlySerializedAs("unitReference")] public EntityData entityReference;
     public float castTime;
     public float cooldown;
     public Sprite sprite;
@@ -23,20 +25,28 @@ public class SkillData : ScriptableObject
         {
             case SkillType.INSTANTIATE_CHARACTER:
                 {
-                    BoxCollider coll = source.GetComponent<BoxCollider>();
-                    Vector3 instantiationPosition = new Vector3(
-                        source.transform.position.x - coll.size.x * 0.7f,
-                        source.transform.position.y,
-                        source.transform.position.z - coll.size.z * 0.7f
-                    );
-                    CharacterData d = (CharacterData)unitReference;
-                    Character c = new Character(d);
-                    c.Transform.position = instantiationPosition;
-                    c.Transform.GetComponent<CharacterManager>().Initialize(c);
+                    RPC_InstantiateCharacter(source);
+                    //EventManager.photonView
+                      //  .RPC("RPC_InstantiateCharacter", RpcTarget.AllBuffered, source);
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    [PunRPC]
+    private void RPC_InstantiateCharacter(GameObject source)
+    {
+        BoxCollider coll = source.GetComponent<BoxCollider>();
+        Vector3 instantiationPosition = new Vector3(
+            source.transform.position.x - coll.size.x * 0.7f,
+            source.transform.position.y,
+            source.transform.position.z - coll.size.z * 0.7f
+        );
+        CharacterData d = (CharacterData)entityReference;
+        Character c = new Character(d);
+        c.Transform.position = instantiationPosition;
+        c.Transform.GetComponent<CharacterManager>().Initialize(c);
     }
 }

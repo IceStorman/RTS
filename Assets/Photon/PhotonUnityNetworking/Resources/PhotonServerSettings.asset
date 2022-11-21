@@ -46,6 +46,8 @@ MonoBehaviour:
   - RPC_SetPlayerInfoPrefab
   - _PreparePlacedBuilding
   - SetMaterials
+  - RPC_InstantiateCharacter
+  - RPC_PlaceBuilding
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

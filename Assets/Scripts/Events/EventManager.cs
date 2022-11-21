@@ -8,8 +8,6 @@ public class EventManager : MonoBehaviour
     private Dictionary<string, CustomEvent> _typedEvents;
     private Dictionary<string, UnityEvent> _events;
 
-    public static PhotonView photonView;
-
     private static EventManager _eventManager;
 
     public static EventManager instance
@@ -27,11 +25,6 @@ public class EventManager : MonoBehaviour
 
             return _eventManager;
         }
-    }
-
-    private void Awake()
-    {
-        photonView = GetComponent<PhotonView>();
     }
 
     private void Init()
@@ -106,19 +99,19 @@ public class EventManager : MonoBehaviour
 
 public class CustomEventData
 {
-    public UnitData unitData;
-    public Unit unit;
+    public EntityData EntityData;
+    public Entity Entity;
 
-    public CustomEventData(UnitData unitData)
+    public CustomEventData(EntityData entityData)
     {
-        this.unitData = unitData;
-        this.unit = null;
+        this.EntityData = entityData;
+        this.Entity = null;
     }
 
-    public CustomEventData(Unit unit)
+    public CustomEventData(Entity entity)
     {
-        this.unitData = null;
-        this.unit = unit;
+        this.EntityData = null;
+        this.Entity = entity;
     }
 }
 
