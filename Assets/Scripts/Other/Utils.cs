@@ -1,8 +1,15 @@
+using System;
 using UnityEngine;
+using Newtonsoft.Json;
+using Photon.Pun;
+using System.Text;
+using ExitGames.Client.Photon;
 
 public static class Utils
 {
     static Texture2D _whiteTexture;
+
+    private static string buildingDataJSON;
     public static Texture2D WhiteTexture
     {
         get
@@ -95,10 +102,36 @@ public static class Utils
         if (inputString == "3" || inputString == "\"") return 3;
         if (inputString == "4" || inputString == "'") return 4;
         if (inputString == "5" || inputString == "(") return 5;
-        if (inputString == "6" || inputString == "§") return 6;
+        if (inputString == "6" || inputString == "&") return 6;
         if (inputString == "7" || inputString == "?") return 7;
         if (inputString == "8" || inputString == "!") return 8;
         if (inputString == "9" || inputString == "?") return 9;
         return -1;
+    }
+
+    public static byte[] Serialize(object obj)
+    {
+        buildingDataJSON = JsonConvert.SerializeObject((Building)obj);
+        Debug.Log(buildingDataJSON);
+        byte[] dataByteArray = Encoding.ASCII.GetBytes(buildingDataJSON);
+        return dataByteArray;
+    }
+
+    public static object Deserialize(byte[] bytes)
+    {
+        byte[] dataBytes = new byte[bytes.Length - 4];
+        if (buildingDataJSON.Length > 0)
+        {
+            Array.Copy(bytes, 4, dataBytes, 0, dataBytes.Length);
+            if(BitConverter.IsLittleEndian)
+                Array.Reverse(dataBytes);
+            buildingDataJSON = Encoding.UTF8.GetString(dataBytes);
+        }
+        else
+        {
+            buildingDataJSON = string.Empty;
+        }
+        Building building = (Building)JsonConvert.DeserializeObject(buildingDataJSON);
+        return building;
     }
 }

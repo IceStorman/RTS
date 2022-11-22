@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
-using System.IO;
 
 public enum BuildingPlacement
 {
@@ -32,10 +30,8 @@ public class Building : Entity
         SetMaterials();
     }
 
-    [PunRPC]
-    public void SetMaterials() { SetMaterials(_placement); }
+    public void SetMaterials() => SetMaterials(_placement); 
 
-    [PunRPC]
     public void SetMaterials(BuildingPlacement placement)
     {
         List<Material> materials;

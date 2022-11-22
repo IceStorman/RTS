@@ -79,7 +79,9 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     
     private void _PlaceBuilding()
     {
-        photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered);
+        //Utils.Serialize(placedBuilding);
+        placedBuilding.Place();
+        //photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, placedBuilding);
         
         if (placedBuilding.CanBuy())
             _PreparePlacedBuilding(placedBuilding.DataIndex);
@@ -91,8 +93,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void RPC_PlaceBuilding()
-        => placedBuilding.Place();
+    private void RPC_PlaceBuilding(Building building)
+        => building.Place();
 
     private void _CancelPlacedBuilding()
     {
