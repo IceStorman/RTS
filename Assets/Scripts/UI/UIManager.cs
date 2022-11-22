@@ -5,7 +5,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    private BuildingPlacer _buildingPlacer;
+    private BuildingPlacer buildingPlacer;
 
     public Transform buildingMenu;
     public GameObject buildingButtonPrefab;
@@ -17,24 +17,24 @@ public class UIManager : MonoBehaviour
     public GameObject selectedUnitDisplayPrefab;
     public GameObject gameResourceCostPrefab;
     public GameObject selectedUnitMenu;
-    private RectTransform _selectedUnitContentRectTransform;
-    private RectTransform _selectedUnitButtonsRectTransform;
-    private TextMeshProUGUI _selectedUnitTitleText;
-    private TextMeshProUGUI _selectedUnitLevelText;
-    private Transform _selectedUnitResourcesProductionParent;
-    private Transform _selectedUnitActionButtonsParent;
+    private RectTransform selectedUnitContentRectTransform;
+    private RectTransform selectedUnitButtonsRectTransform;
+    private TextMeshProUGUI selectedUnitTitleText;
+    private TextMeshProUGUI selectedUnitLevelText;
+    private Transform selectedUnitResourcesProductionParent;
+    private Transform selectedUnitActionButtonsParent;
 
     private Entity selectedEntity;
     public GameObject unitSkillButtonPrefab;
 
     public Transform selectionGroupsParent;
 
-    private Dictionary<string, TextMeshProUGUI> _resourceTexts;
-    private Dictionary<string, Button> _buildingButtons;
+    private Dictionary<string, TextMeshProUGUI> resourceTexts;
+    private Dictionary<string, Button> buildingButtons;
 
     private void Awake()
     {
-        _buildingPlacer = GetComponent<BuildingPlacer>();
+        buildingPlacer = GetComponent<BuildingPlacer>();
         InitResources();
         InitBuildingButtons();
         ToggleAllSelectionGroupButtons();
@@ -56,13 +56,13 @@ public class UIManager : MonoBehaviour
 
     private void InitResources()
     {
-        _resourceTexts = new Dictionary<string, TextMeshProUGUI>();
+        resourceTexts = new Dictionary<string, TextMeshProUGUI>();
 
         foreach (KeyValuePair<string, GameResource> pair in Globals.GAME_RESOURCES)
         {
             GameObject display = Instantiate(gameResourcesDisplayPrefab, resourcesUIParent);
             display.name = pair.Key;
-            _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             SetResourceText(pair.Key, pair.Value.Amount);
             display.transform.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>(
                     $"Textures/GameResources/{pair.Key}");
@@ -71,7 +71,7 @@ public class UIManager : MonoBehaviour
 
     private void InitBuildingButtons()
     {
-        _buildingButtons = new Dictionary<string, Button>();
+        buildingButtons = new Dictionary<string, Button>();
 
         for (int i = 0; i < Globals.BUILDING_DATA.Length; i++)
         {
@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour
 
             button.name = data.unitName;
             button.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = data.unitName;
-            _buildingButtons[data.code] = b;
+            buildingButtons[data.code] = b;
 
             AddBuildingButtonListener(b, i);
 
@@ -97,17 +97,17 @@ public class UIManager : MonoBehaviour
     private void InitSelectedUnitMenu()
     {
         Transform selectedUnitMenuTransform = selectedUnitMenu.transform;
-        _selectedUnitContentRectTransform = selectedUnitMenuTransform
+        selectedUnitContentRectTransform = selectedUnitMenuTransform
             .Find("Content").GetComponent<RectTransform>();
-        _selectedUnitButtonsRectTransform = selectedUnitMenuTransform
+        selectedUnitButtonsRectTransform = selectedUnitMenuTransform
             .Find("Buttons").GetComponent<RectTransform>();
-        _selectedUnitTitleText = selectedUnitMenuTransform
+        selectedUnitTitleText = selectedUnitMenuTransform
             .Find("Content/GeneralInfo/Title").GetComponent<TextMeshProUGUI>();
-        _selectedUnitLevelText = selectedUnitMenuTransform
+        selectedUnitLevelText = selectedUnitMenuTransform
             .Find("Content/GeneralInfo/Level").GetComponent<TextMeshProUGUI>();
-        _selectedUnitResourcesProductionParent = selectedUnitMenuTransform
+        selectedUnitResourcesProductionParent = selectedUnitMenuTransform
             .Find("Content/ResourcesProduction");
-        _selectedUnitActionButtonsParent = selectedUnitMenuTransform
+        selectedUnitActionButtonsParent = selectedUnitMenuTransform
             .Find("Buttons/SpecificActions");
     }
 
@@ -135,18 +135,18 @@ public class UIManager : MonoBehaviour
 
     private void SetResourceText(string resource, int value)
     {
-        _resourceTexts[resource].text = value.ToString();
+        resourceTexts[resource].text = value.ToString();
     }
 
     private void OnCheckBuildingButtons()
     {
         foreach (BuildingData data in Globals.BUILDING_DATA)
-            _buildingButtons[data.code].interactable = data.CanBuy();
+            buildingButtons[data.code].interactable = data.CanBuy();
     }
 
     private void AddBuildingButtonListener(Button b, int i)
     {
-        b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
+        b.onClick.AddListener(() => buildingPlacer.SelectPlacedBuilding(i));
     }
 
     private void OnSelectUnit(CustomEventData data)
@@ -178,25 +178,25 @@ public class UIManager : MonoBehaviour
     {
         int contentHeight = 120 + entity.Production.Count * 16;
 
-        _selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
+        selectedUnitContentRectTransform.sizeDelta = new Vector2(64, contentHeight);
 
-        _selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, 0);
-        _selectedUnitButtonsRectTransform.sizeDelta = new Vector2(0, Screen.height - contentHeight);
+        selectedUnitButtonsRectTransform.anchoredPosition = new Vector2(0, 0);
+        selectedUnitButtonsRectTransform.sizeDelta = new Vector2(0, Screen.height - contentHeight);
 
-        _selectedUnitTitleText.text = entity.Data.unitName;
-        _selectedUnitLevelText.text = $"Level {entity.Level}";
+        selectedUnitTitleText.text = entity.Data.unitName;
+        selectedUnitLevelText.text = $"Level {entity.Level}";
     }
 
     public void SetUnitProduction(Entity entity)
     {
-        foreach (Transform child in _selectedUnitResourcesProductionParent)
+        foreach (Transform child in selectedUnitResourcesProductionParent)
             Destroy(child.gameObject);
         
         if (entity.Production.Count <= 0) return;
         foreach (ResourceValue resource in entity.Production)
         {
             GameObject g = GameObject.Instantiate(
-                gameResourceCostPrefab, _selectedUnitResourcesProductionParent);
+                gameResourceCostPrefab, selectedUnitResourcesProductionParent);
             Transform t = g.transform;
             t.Find("Text").GetComponent<TextMeshProUGUI>().text = $"+{resource.amount}";
             t.Find("Icon").GetComponent<Image>().sprite = Resources.Load<Sprite>($"Textures/GameResources/{resource.code}");
@@ -205,14 +205,14 @@ public class UIManager : MonoBehaviour
 
     private void SetSkillButtons(Entity entity)
     {
-        foreach (Transform child in _selectedUnitActionButtonsParent)
+        foreach (Transform child in selectedUnitActionButtonsParent)
             Destroy(child.gameObject);
         
         if (entity.SkillManagers.Count <= 0) return;
         for (int i = 0; i < entity.SkillManagers.Count; i++)
         {
             GameObject g = GameObject.Instantiate(
-                unitSkillButtonPrefab, _selectedUnitActionButtonsParent);
+                unitSkillButtonPrefab, selectedUnitActionButtonsParent);
             Transform t = g.transform;
             Button b = g.GetComponent<Button>();
             entity.SkillManagers[i].SetButton(b);

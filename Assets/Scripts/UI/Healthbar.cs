@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Healthbar : MonoBehaviour
@@ -8,12 +9,22 @@ public class Healthbar : MonoBehaviour
     private Vector3 _lastTargetPosition;
     private Vector2 _pos;
 
+    private Transform camera;
+    private Vector3 lastCameraPosition;
+    private float lastOrthographicSize;
+
     private float _yOffset;
+
+    private void Awake()
+    {
+        camera = Camera.main.transform;
+    }
 
     private void Update()
     {
-        if (!_target || _lastTargetPosition == _target.position)
-            return;
+        if (lastCameraPosition == camera.position 
+            && lastOrthographicSize == camera.GetComponent<Camera>().orthographicSize 
+            && _target && _lastTargetPosition == _target.position) return;
         SetPosition();
     }
 
@@ -30,5 +41,8 @@ public class Healthbar : MonoBehaviour
         _pos.y += _yOffset;
         rectTransform.anchoredPosition = _pos;
         _lastTargetPosition = _target.position;
+        
+        lastCameraPosition = camera.position;
+        lastOrthographicSize = camera.GetComponent<Camera>().orthographicSize;
     }
 }
