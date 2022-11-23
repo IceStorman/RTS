@@ -1,22 +1,23 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
-using Photon.Pun;
 
+[System.Serializable]
+public class TypedEvent : UnityEvent<object> {}
 public class EventManager : MonoBehaviour
 {
-    private Dictionary<string, CustomEvent> _typedEvents;
     private Dictionary<string, UnityEvent> _events;
+    private Dictionary<string, TypedEvent> _typedEvents;
 
     private static EventManager _eventManager;
 
-    public static EventManager instance
+    public static EventManager Instance
     {
         get
         {
             if (!_eventManager)
             {
-                _eventManager = FindObjectOfType(typeof (EventManager)) as EventManager;
+                _eventManager = FindObjectOfType(typeof(EventManager)) as EventManager;
 
                 if (!_eventManager)
                     Debug.LogError("There needs to be one active EventManager script on a GameObject in your scene.");
@@ -32,14 +33,14 @@ public class EventManager : MonoBehaviour
         if(_events == null)
         {
             _events = new Dictionary<string, UnityEvent>();
-            _typedEvents = new Dictionary<string, CustomEvent>();
+            _typedEvents = new Dictionary<string, TypedEvent>();
         }
     }
 
     public static void AddListener(string eventName, UnityAction listener)
     {
         UnityEvent evt = null;
-        if(instance._events.TryGetValue(eventName, out evt))
+        if(Instance._events.TryGetValue(eventName, out evt))
         {
             evt.AddListener(listener);
         }
@@ -47,22 +48,22 @@ public class EventManager : MonoBehaviour
         {
             evt = new UnityEvent();
             evt.AddListener(listener);
-            instance._events.Add(eventName, evt);
+            Instance._events.Add(eventName, evt);
         }
     }
 
-    public static void AddTypedListener(string eventName, UnityAction<CustomEventData> listener)
+    public static void AddListener(string eventName, UnityAction<object> listener)
     {
-        CustomEvent evt = null;
-        if (instance._typedEvents.TryGetValue(eventName, out evt))
+        TypedEvent evt = null;
+        if (Instance._typedEvents.TryGetValue(eventName, out evt))
         {
             evt.AddListener(listener);
         }
         else
         {
-            evt = new CustomEvent();
+            evt = new TypedEvent();
             evt.AddListener(listener);
-            instance._typedEvents.Add(eventName, evt);
+            Instance._typedEvents.Add(eventName, evt);
         }
     }
 
@@ -70,50 +71,29 @@ public class EventManager : MonoBehaviour
     {
         if (_eventManager == null) return;
         UnityEvent evt = null;
-        if (instance._events.TryGetValue(eventName, out evt))
+        if (Instance._events.TryGetValue(eventName, out evt))
             evt.RemoveListener(listener);
     }
 
-    public static void RemoveTypedListener(string eventName, UnityAction<CustomEventData> listener)
+    public static void RemoveListener(string eventName, UnityAction<object> listener)
     {
         if (_eventManager == null) return;
-        CustomEvent evt = null;
-        if (instance._typedEvents.TryGetValue(eventName, out evt))
+        TypedEvent evt = null;
+        if (Instance._typedEvents.TryGetValue(eventName, out evt))
             evt.RemoveListener(listener);
     }
 
     public static void TriggerEvent(string eventName)
     {
         UnityEvent evt = null;
-        if(instance._events.TryGetValue(eventName, out evt))
+        if(Instance._events.TryGetValue(eventName, out evt))
             evt.Invoke();
     }
 
-    public static void TriggerTypedEvent(string eventName, CustomEventData data)
+    public static void TriggerEvent(string eventName, object data)
     {
-        CustomEvent evt = null;
-        if (instance._typedEvents.TryGetValue(eventName, out evt))
+        TypedEvent evt = null;
+        if (Instance._typedEvents.TryGetValue(eventName, out evt))
             evt.Invoke(data);
     }
 }
-
-public class CustomEventData
-{
-    public EntityData EntityData;
-    public Entity Entity;
-
-    public CustomEventData(EntityData entityData)
-    {
-        this.EntityData = entityData;
-        this.Entity = null;
-    }
-
-    public CustomEventData(Entity entity)
-    {
-        this.EntityData = null;
-        this.Entity = entity;
-    }
-}
-
-[System.Serializable]
-public class CustomEvent : UnityEvent<CustomEventData> { }

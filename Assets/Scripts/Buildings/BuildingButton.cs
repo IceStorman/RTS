@@ -32,9 +32,9 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         _buildingData = buildingData;
     }
 
-    private void OnHoverBuildingButton(CustomEventData data)
+    private void OnHoverBuildingButton(object data)
     {
-        SetInfoPanel((BuildingData)data.EntityData);
+        SetInfoPanel((EntityData)data);
         ShowInfoPanel(true);
     }
 
@@ -45,7 +45,7 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        OnHoverBuildingButton(new CustomEventData(_buildingData));
+        OnHoverBuildingButton(_buildingData);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -53,7 +53,7 @@ public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         OnUnHoverBuildingButton();
     }
 
-    public void SetInfoPanel(BuildingData data)
+    public void SetInfoPanel(EntityData data)
     {
         if (data.unitName != "")
             _infoPanelTitleText.text = data.unitName;

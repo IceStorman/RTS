@@ -58,7 +58,7 @@ public class EntityManager : MonoBehaviour
             h.Initialize(transform, boundingBox.height);
             h.SetPosition();
         }
-        EventManager.TriggerTypedEvent("SelectUnit", new CustomEventData(Entity));
+        EventManager.TriggerEvent("SelectEntity", Entity);
     }
 
     public void Select() => Select(false, false);
@@ -94,6 +94,6 @@ public class EntityManager : MonoBehaviour
         selectionCircle.SetActive(false);
         Destroy(_healthbar);
         _healthbar = null;
-        EventManager.TriggerTypedEvent("DeselectUnit", new CustomEventData(Entity));
+        EventManager.TriggerEvent("DeselectEntity", Entity);
     }
 }

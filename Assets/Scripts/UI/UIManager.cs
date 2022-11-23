@@ -115,16 +115,16 @@ public class UIManager : MonoBehaviour
     {
         EventManager.AddListener("UpdateResourceTexts", OnUpdateResourceTexts);
         EventManager.AddListener("CheckBuildingButtons", OnCheckBuildingButtons);
-        EventManager.AddTypedListener("SelectUnit", OnSelectUnit);
-        EventManager.AddTypedListener("DeselectUnit", OnDeselectUnit);
+        EventManager.AddListener("SelectEntity", OnSelectUnit);
+        EventManager.AddListener("DeselectEntity", OnDeselectUnit);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveListener("UpdateResourceTexts", OnUpdateResourceTexts);
         EventManager.RemoveListener("CheckBuildingButtons", OnCheckBuildingButtons);
-        EventManager.RemoveTypedListener("SelectUnit", OnSelectUnit);
-        EventManager.RemoveTypedListener("DeselectUnit", OnDeselectUnit);
+        EventManager.RemoveListener("SelectEntity", OnSelectUnit);
+        EventManager.RemoveListener("DeselectEntity", OnDeselectUnit);
     }
 
     private void OnUpdateResourceTexts()
@@ -149,16 +149,18 @@ public class UIManager : MonoBehaviour
         b.onClick.AddListener(() => buildingPlacer.SelectPlacedBuilding(i));
     }
 
-    private void OnSelectUnit(CustomEventData data)
+    private void OnSelectUnit(object data)
     {
-        AddSelectedUnitToUIList(data.Entity);
-        _SetSelectedUnitMenu(data.Entity);
+        Entity entity = (Entity)data;
+        AddSelectedUnitToUIList(entity);
+        _SetSelectedUnitMenu(entity);
         _ShowSelectedUnitMenu(true);
     }
 
-    private void OnDeselectUnit(CustomEventData data)
+    private void OnDeselectUnit(object data)
     {
-        RemoveSelectedUnitFromUIList(data.Entity.Code);
+        Entity entity = (Entity)data;
+        RemoveSelectedUnitFromUIList(entity.Code);
         if (Globals.SELECTED_UNITS.Count == 0)
             _ShowSelectedUnitMenu(false);
         else
