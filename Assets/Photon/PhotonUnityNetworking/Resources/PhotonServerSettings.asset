@@ -48,6 +48,7 @@ MonoBehaviour:
   - SetMaterials
   - RPC_InstantiateCharacter
   - RPC_PlaceBuilding
+  - RPC_CreateBuildingPrefab
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

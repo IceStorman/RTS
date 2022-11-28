@@ -35,24 +35,30 @@ public class Building : Entity
     public void SetMaterials(BuildingPlacement placement)
     {
         List<Material> materials;
-        if (placement == BuildingPlacement.VALID)
+        switch (placement)
         {
-            Material refMaterial = Resources.Load("Materials/Valid") as Material;
-            materials = new List<Material>();
-            for (int i = 0; i < _materials.Count; i++)
-                materials.Add(refMaterial);
+            case BuildingPlacement.VALID:
+            {
+                Material refMaterial = Resources.Load("Materials/Valid") as Material;
+                materials = new List<Material>();
+                for (int i = 0; i < _materials.Count; i++)
+                    materials.Add(refMaterial);
+                break;
+            }
+            case BuildingPlacement.INVALID:
+            {
+                Material refMaterial = Resources.Load("Materials/Invalid") as Material;
+                materials = new List<Material>();
+                for (int i = 0; i < _materials.Count; i++)
+                    materials.Add(refMaterial);
+                break;
+            }
+            case BuildingPlacement.FIXED:
+                materials = _materials;
+                break;
+            default:
+                return;
         }
-        else if (placement == BuildingPlacement.INVALID)
-        {
-            Material refMaterial = Resources.Load("Materials/Invalid") as Material;
-            materials = new List<Material>();
-            for (int i = 0; i < _materials.Count; i++)
-                materials.Add(refMaterial);
-        }
-        else if (placement == BuildingPlacement.FIXED)
-            materials = _materials;
-        else
-            return;
         _transform.Find("Mesh").GetComponent<Renderer>().materials = materials.ToArray();
     }
 

@@ -12,7 +12,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
     public void SelectPlacedBuilding(int buildingIndex)
     {
-        _PreparePlacedBuilding(buildingIndex);
+        PreparePlacedBuilding(buildingIndex);
     }
 
     private void Awake()
@@ -24,20 +24,23 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     {
         if(placedBuilding != null && Input.GetKeyUp(KeyCode.Escape))
         {
-            _CancelPlacedBuilding();
+            CancelPlacedBuilding();
             return;
         }
 
         TrySetBuildingPosition();
 
-        TryPlaceBuilding();
+        if (Input.GetMouseButtonDown(0))
+        {
+            TryPlaceBuilding();
+        }
     }
 
     private void TryPlaceBuilding()
     {
         if (CanPlaceBuilding())
         {
-            _PlaceBuilding();
+            PlaceBuilding();
         }
     }
     
@@ -58,45 +61,55 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     
     private bool CanPlaceBuilding()
         => placedBuilding is { HasValidPlacement: true } &&
-           Input.GetMouseButtonDown(0) &&
            !EventSystem.current.IsPointerOverGameObject();
     
-    private void _PreparePlacedBuilding(int buildingDataIndex)
+    private void PreparePlacedBuilding(int buildingDataIndex)
     {
         if (placedBuilding is {IsFixed: false})
         {
             Destroy(placedBuilding.Transform.gameObject);
         }
 
+        photonView.RPC("RPC_CreateBuildingPrefab", RpcTarget.AllBuffered, buildingDataIndex);
+        lastPlacementPosition = Vector3.zero;
+    }
+    
+    private void PlaceBuilding()
+    {
+        photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered);
+        
+        EventManager.TriggerEvent("UpdateResourceTexts");
+        EventManager.TriggerEvent("CheckBuildingButtons");
+        
+        TryContinuePlacing();
+        
+        Debug.Log("Completed");
+    }
+
+    private void TryContinuePlacing()
+    {
+        if (placedBuilding.CanBuy())
+            PreparePlacedBuilding(placedBuilding.DataIndex);
+        else
+            placedBuilding = null;
+    }
+    
+    [PunRPC]
+    private void RPC_CreateBuildingPrefab(int buildingDataIndex)
+    {
         Building building = new Building(
             Globals.BUILDING_DATA[buildingDataIndex]
         );
 
         building.Transform.GetComponent<BuildingManager>().Initialize(building);
         placedBuilding = building;
-        lastPlacementPosition = Vector3.zero;
     }
     
-    private void _PlaceBuilding()
-    {
-        //Utils.Serialize(placedBuilding);
-        placedBuilding.Place();
-        //photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, placedBuilding);
-        
-        if (placedBuilding.CanBuy())
-            _PreparePlacedBuilding(placedBuilding.DataIndex);
-        else
-            placedBuilding = null;
-        EventManager.TriggerEvent("UpdateResourceTexts");
-        EventManager.TriggerEvent("CheckBuildingButtons");
-        Debug.Log("Completed");
-    }
-
     [PunRPC]
-    private void RPC_PlaceBuilding(Building building)
-        => building.Place();
+    private void RPC_PlaceBuilding()
+        => placedBuilding.Place();
 
-    private void _CancelPlacedBuilding()
+    private void CancelPlacedBuilding()
     {
         Destroy(placedBuilding.Transform.gameObject);
         placedBuilding = null;

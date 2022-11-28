@@ -69,12 +69,10 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks
         GameObject tempListing = Instantiate(roomListingPrefab, roomsPanel);
         RoomButton tempButton = tempListing.GetComponent<RoomButton>();
 
-        if(room.IsOpen && room.IsVisible)
-        {
-            tempButton.roomName = room.Name;
-            tempButton.roomSize = room.MaxPlayers;
-            tempButton.SetRoom();
-        }
+        if (!room.IsOpen || !room.IsVisible) return;
+        tempButton.roomName = room.Name;
+        tempButton.roomSize = room.MaxPlayers;
+        tempButton.SetRoom();
     }
 
     public void OpenCreateRoomPanelOnClick()
