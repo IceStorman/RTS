@@ -8,8 +8,8 @@ public class BuildingManager : EntityManager
 
     public override Entity Entity
     {
-        get { return _building; }
-        set { _building = value is Building ? (Building)value : null; }
+        get => _building;
+        set => _building = value is Building building ? building : null;
     }
 
     public void Initialize(Building building)
@@ -62,7 +62,9 @@ public class BuildingManager : EntityManager
         Vector3 p = transform.position;
         Vector3 c = _collider.center;
         Vector3 e = _collider.size / 2f;
+        
         float bottomHeight = c.y - e.y + 0.5f;
+        
         Vector3[] bottomCorners = new Vector3[]
         {
             new Vector3(c.x - e.x, bottomHeight, c.z - e.z),
@@ -75,12 +77,14 @@ public class BuildingManager : EntityManager
         foreach (Vector3 corner in bottomCorners)
         {
             if (!Physics.Raycast(
-                p + corner,
-                Vector3.up * -1f,
-                2f,
-                Globals.TERRAIN_LAYER_MASK
-            ))
+                    p + corner,
+                    Vector3.up * -1f,
+                    2f,
+                    Globals.TERRAIN_LAYER_MASK
+                ))
+            {
                 invalidCornersCount++;
+            }
         }
         return invalidCornersCount < 3;
     }

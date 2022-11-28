@@ -83,21 +83,28 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         
         TryContinuePlacing();
         
+        Globals.UpdateNavMeshSurface();
+        
         Debug.Log("Completed");
     }
 
     private void TryContinuePlacing()
     {
         if (placedBuilding.CanBuy())
+        {
             PreparePlacedBuilding(placedBuilding.DataIndex);
+        }
         else
+        {
+            EventManager.TriggerEvent("PlaceBuildingOff");
             placedBuilding = null;
+        }
     }
     
     [PunRPC]
     private void RPC_CreateBuildingPrefab(int buildingDataIndex)
     {
-        Building building = new Building(
+        var building = new Building(
             Globals.BUILDING_DATA[buildingDataIndex]
         );
 

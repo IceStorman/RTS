@@ -60,7 +60,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             Destroy(profileDisplay);
         }
-        foreach(KeyValuePair<int, Player> player in PhotonNetwork.CurrentRoom.Players)
+        foreach(var player in PhotonNetwork.CurrentRoom.Players)
         {
             GameObject display = Instantiate(playerInfoDisplayPrefab, playerPanel);
             display.transform.Find("NickName")

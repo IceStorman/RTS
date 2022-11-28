@@ -1,9 +1,11 @@
 using System.Collections.Generic;
-using Photon.Pun;
+using UnityEngine.AI;
 
 public class Globals
 {
     public static int TERRAIN_LAYER_MASK = 1 << 8;
+
+    public static NavMeshSurface NAV_MESH_SURFACE;
 
     public static List<EntityManager> SELECTED_UNITS = new List<EntityManager>();
 
@@ -16,4 +18,9 @@ public class Globals
             {"wood", new GameResource("Wood", 800) },
             {"stone", new GameResource("Stone", 800) }
         };
+
+    public static void UpdateNavMeshSurface()
+    {
+        NAV_MESH_SURFACE.UpdateNavMesh(NAV_MESH_SURFACE.navMeshData);
+    }
 }
