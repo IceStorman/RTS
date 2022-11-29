@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     
     private void Awake()
     {
-        PhotonPeer.RegisterType(typeof(Building), (byte)'B', Utils.Serialize, Utils.Deserialize);
         DataHandler.LoadGameData();
         GetComponent<DayAndNightCycler>().enabled = gameParameters.enableDayAndNightCycle;
         Globals.NAV_MESH_SURFACE = GameObject.Find("Terrain").GetComponent<NavMeshSurface>();

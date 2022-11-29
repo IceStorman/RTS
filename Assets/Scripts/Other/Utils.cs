@@ -8,8 +8,7 @@ using ExitGames.Client.Photon;
 public static class Utils
 {
     static Texture2D _whiteTexture;
-
-    private static string buildingDataJSON;
+    
     public static Texture2D WhiteTexture
     {
         get
@@ -109,29 +108,12 @@ public static class Utils
         return -1;
     }
 
-    public static byte[] Serialize(object obj)
+    public static (float, float, float) ConvertVector3(Vector3 position)
     {
-        buildingDataJSON = JsonConvert.SerializeObject((Building)obj);
-        Debug.Log(buildingDataJSON);
-        byte[] dataByteArray = Encoding.ASCII.GetBytes(buildingDataJSON);
-        return dataByteArray;
-    }
-
-    public static object Deserialize(byte[] bytes)
-    {
-        byte[] dataBytes = new byte[bytes.Length - 4];
-        if (buildingDataJSON.Length > 0)
-        {
-            Array.Copy(bytes, 4, dataBytes, 0, dataBytes.Length);
-            if(BitConverter.IsLittleEndian)
-                Array.Reverse(dataBytes);
-            buildingDataJSON = Encoding.UTF8.GetString(dataBytes);
-        }
-        else
-        {
-            buildingDataJSON = string.Empty;
-        }
-        Building building = (Building)JsonConvert.DeserializeObject(buildingDataJSON);
-        return building;
+        float x = position.x;
+        float y = position.y;
+        float z = position.z;
+        
+        return (x, y, z);
     }
 }

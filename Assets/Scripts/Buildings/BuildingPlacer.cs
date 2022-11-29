@@ -4,7 +4,7 @@ using Photon.Pun;
 
 public class BuildingPlacer : MonoBehaviourPunCallbacks
 {
-    private Building placedBuilding;
+    private Building buildingSketch;
 
     private Ray ray;
     private RaycastHit raycastHit;
@@ -22,7 +22,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if(placedBuilding != null && Input.GetKeyUp(KeyCode.Escape))
+        if(buildingSketch != null && Input.GetKeyUp(KeyCode.Escape))
         {
             CancelPlacedBuilding();
             return;
@@ -48,35 +48,46 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     {
         if (Camera.main != null) ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (placedBuilding == null ||
+        if (buildingSketch == null ||
             !Physics.Raycast(ray, out raycastHit, 1000f, Globals.TERRAIN_LAYER_MASK)) return;
         
-        placedBuilding.SetPosition(raycastHit.point);
+        buildingSketch.SetPosition(raycastHit.point);
         if (lastPlacementPosition != raycastHit.point)
         {
-            placedBuilding.CheckValidPlacement();
+            buildingSketch.CheckValidPlacement();
         }
         lastPlacementPosition = raycastHit.point;
     }
     
     private bool CanPlaceBuilding()
-        => placedBuilding is { HasValidPlacement: true } &&
+        => buildingSketch is { HasValidPlacement: true } &&
            !EventSystem.current.IsPointerOverGameObject();
     
     private void PreparePlacedBuilding(int buildingDataIndex)
     {
-        if (placedBuilding is {IsFixed: false})
+        if (buildingSketch is {IsFixed: false})
         {
-            Destroy(placedBuilding.Transform.gameObject);
+            Destroy(buildingSketch.Transform.gameObject);
         }
 
-        photonView.RPC("RPC_CreateBuildingPrefab", RpcTarget.AllBuffered, buildingDataIndex);
+        var building = new Building(
+            Globals.BUILDING_DATA[buildingDataIndex]
+        );
+
+        building.Transform.GetComponent<BuildingManager>().Initialize(building);
+        buildingSketch = building;
         lastPlacementPosition = Vector3.zero;
     }
     
     private void PlaceBuilding()
     {
-        photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered);
+        var buildingDataIndex = buildingSketch.DataIndex;
+        var x = lastPlacementPosition.x;
+        var y = lastPlacementPosition.y;
+        var z = lastPlacementPosition.z;
+
+        photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, 
+            buildingDataIndex, x, y, z);
         
         EventManager.TriggerEvent("UpdateResourceTexts");
         EventManager.TriggerEvent("CheckBuildingButtons");
@@ -84,41 +95,35 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         TryContinuePlacing();
         
         Globals.UpdateNavMeshSurface();
-        
-        Debug.Log("Completed");
     }
 
     private void TryContinuePlacing()
     {
-        if (placedBuilding.CanBuy())
+        if (buildingSketch.CanBuy())
         {
-            PreparePlacedBuilding(placedBuilding.DataIndex);
+            PreparePlacedBuilding(buildingSketch.DataIndex);
         }
         else
         {
-            EventManager.TriggerEvent("PlaceBuildingOff");
-            placedBuilding = null;
+            buildingSketch = null;
         }
     }
-    
-    [PunRPC]
-    private void RPC_CreateBuildingPrefab(int buildingDataIndex)
-    {
-        var building = new Building(
-            Globals.BUILDING_DATA[buildingDataIndex]
-        );
 
-        building.Transform.GetComponent<BuildingManager>().Initialize(building);
-        placedBuilding = building;
-    }
-    
     [PunRPC]
-    private void RPC_PlaceBuilding()
-        => placedBuilding.Place();
+    private void RPC_PlaceBuilding(int buildingDataIndex, float x, float y, float z)
+    {
+        Building building = new (Globals.BUILDING_DATA[buildingDataIndex]);
+        building.Transform.GetComponent<BuildingManager>().Initialize(building);
+        
+        Vector3 position = new (x, y, z);
+        building.SetPosition(position);
+
+        building.Place();
+    }
 
     private void CancelPlacedBuilding()
     {
-        Destroy(placedBuilding.Transform.gameObject);
-        placedBuilding = null;
+        Destroy(buildingSketch.Transform.gameObject);
+        buildingSketch = null;
     }
 }
