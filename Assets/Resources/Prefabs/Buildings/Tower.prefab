@@ -184,6 +184,7 @@ GameObject:
   - component: {fileID: 7585461569223141739}
   - component: {fileID: 8979599955755262397}
   - component: {fileID: -2037879203478454108}
+  - component: {fileID: 5662681641715529753}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Entity
@@ -272,3 +273,19 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!208 &5662681641715529753
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2459024928930821840}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

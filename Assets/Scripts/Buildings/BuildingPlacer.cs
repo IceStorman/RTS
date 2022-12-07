@@ -46,7 +46,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     
     private void TrySetBuildingPosition()
     {
-        if (Camera.main != null) ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Camera.main != null) 
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (buildingSketch == null ||
             !Physics.Raycast(ray, out raycastHit, 1000f, Globals.TERRAIN_LAYER_MASK)) return;
@@ -70,9 +71,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
             Destroy(buildingSketch.Transform.gameObject);
         }
 
-        var building = new Building(
-            Globals.BUILDING_DATA[buildingDataIndex]
-        );
+        Building building = new (Globals.BUILDING_DATA[buildingDataIndex]);
 
         building.Transform.GetComponent<BuildingManager>().Initialize(building);
         buildingSketch = building;
@@ -88,13 +87,11 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
 
         photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, 
             buildingDataIndex, x, y, z);
-        
+
         EventManager.TriggerEvent("UpdateResourceTexts");
         EventManager.TriggerEvent("CheckBuildingButtons");
         
         TryContinuePlacing();
-        
-        Globals.UpdateNavMeshSurface();
     }
 
     private void TryContinuePlacing()
@@ -105,7 +102,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         }
         else
         {
-            buildingSketch = null;
+            CancelPlacedBuilding();
         }
     }
 
@@ -119,6 +116,8 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         building.SetPosition(position);
 
         building.Place();
+        
+        Globals.UpdateNavMeshSurface();
     }
 
     private void CancelPlacedBuilding()

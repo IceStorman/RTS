@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: Produce a soldier
   description: Produce a soldier.
   type: 0
-  unitReference: {fileID: 11400000, guid: 55cedac24c8a82e41890cf6fa642dbba, type: 2}
+  entityReference: {fileID: 11400000, guid: 55cedac24c8a82e41890cf6fa642dbba, type: 2}
   castTime: 1
   cooldown: 1
   sprite: {fileID: 21300000, guid: 8155e2639cd449540ac862478791c54e, type: 3}

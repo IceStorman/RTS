@@ -19,7 +19,7 @@ public class Entity
         _data = data;
         _currentHealth = data.healthpoints;
 
-        GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
+        var g = Object.Instantiate(data.prefab);
         _transform = g.transform;
 
         _uid = System.Guid.NewGuid().ToString();
@@ -27,10 +27,9 @@ public class Entity
         _production = production;
 
         _skillManagers = new List<SkillManager>();
-        SkillManager sm;
         foreach (SkillData skill in _data.skills)
         {
-            sm = g.AddComponent<SkillManager>();
+            var sm = g.AddComponent<SkillManager>();
             sm.Initialize(skill, g);
             _skillManagers.Add(sm);
         }

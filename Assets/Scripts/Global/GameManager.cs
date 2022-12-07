@@ -38,10 +38,12 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Globals.TERRAIN_LAYER_MASK
             )) return;
 
-        foreach (var entityManager in Globals.SELECTED_UNITS
-                     .Where(entityManager => entityManager.GetType() == typeof(CharacterManager)))
+        foreach (var entityManager in Globals.SELECTED_UNITS)
         {
-            ((CharacterManager)entityManager).MoveTo(raycastHit.point);
+            if (entityManager.GetType() == typeof(CharacterManager))
+            {
+                ((CharacterManager)entityManager).MoveTo(raycastHit.point);
+            }
         }
     }
 }

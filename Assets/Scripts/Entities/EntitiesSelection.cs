@@ -50,27 +50,31 @@ public class EntitiesSelection : MonoBehaviour
         }
 
         if (!Input.anyKeyDown) return;
-        int alphaKey = Utils.GetAlphaKeyValue(Input.inputString);
+        
+        var alphaKey = Utils.GetAlphaKeyValue(Input.inputString);
+        
         if (alphaKey == -1) return;
+        
         if (
-            Input.GetKey(KeyCode.X) ||
+            Input.GetKey(KeyCode.LeftControl) ||
             Input.GetKey(KeyCode.RightControl) ||
             Input.GetKey(KeyCode.LeftApple) ||
-            Input.GetKey(KeyCode.RightApple)
+            Input.GetKey(KeyCode.RightApple) ||
+            Input.GetKey(KeyCode.X)
         )
         {
-            _CreateSelectionGroup(alphaKey);
+            CreateSelectionGroup(alphaKey);
         }
         else
-            _ReselectGroup(alphaKey);
+            ReselectGroup(alphaKey);
     }
 
     public void SelectUnitsGroup(int groupIndex)
     {
-        _ReselectGroup(groupIndex);
+        ReselectGroup(groupIndex);
     }
 
-    private void _CreateSelectionGroup(int groupIndex)
+    private void CreateSelectionGroup(int groupIndex)
     {
         if (Globals.SELECTED_UNITS.Count == 0)
         {
@@ -89,7 +93,7 @@ public class EntitiesSelection : MonoBehaviour
         uiManager.ToggleSelectionGroupButton(groupIndex, false);
     }
 
-    private void _ReselectGroup(int groupIndex)
+    private void ReselectGroup(int groupIndex)
     {
         if (!_selectionGroups.ContainsKey(groupIndex)) return;
         _DeselectAllUnits();
@@ -134,5 +138,4 @@ public class EntitiesSelection : MonoBehaviour
             Utils.DrawScreenRectBorder(rect, 1, new Color(0.5f, 1f, 0.4f));
         }
     }
-
 }

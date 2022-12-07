@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using Photon.Pun;
 
 [System.Serializable]
 public class TypedEvent : UnityEvent<object> {}
@@ -10,6 +12,8 @@ public class EventManager : MonoBehaviour
     private Dictionary<string, TypedEvent> _typedEvents;
 
     private static EventManager _eventManager;
+
+    public static PhotonView PhotonView;
 
     public static EventManager Instance
     {
@@ -26,6 +30,11 @@ public class EventManager : MonoBehaviour
 
             return _eventManager;
         }
+    }
+
+    private void Awake()
+    {
+        PhotonView = GetComponent<PhotonView>();
     }
 
     private void Init()

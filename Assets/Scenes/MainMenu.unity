@@ -232,7 +232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &146488993
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3360,7 +3360,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectionText: {fileID: 1408101611}
-  playerProfile: {fileID: 3497787001583397140, guid: 60cd1d64db7a6a849b66a2f8f1bce2a0, type: 3}
   playerInfoDisplayPrefab: {fileID: 3208213568916340015, guid: 60cd1d64db7a6a849b66a2f8f1bce2a0, type: 3}
   playerPanel: {fileID: 425909018}
 --- !u!114 &1240180925

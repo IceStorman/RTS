@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
         ToggleAllSelectionGroupButtons();
         InitSelectedUnitMenu();
 
-        _ShowSelectedUnitMenu(false);
+        ShowSelectedUnitMenu(false);
     }
 
     private void ToggleAllSelectionGroupButtons()
@@ -153,8 +153,8 @@ public class UIManager : MonoBehaviour
     {
         Entity entity = (Entity)data;
         AddSelectedUnitToUIList(entity);
-        _SetSelectedUnitMenu(entity);
-        _ShowSelectedUnitMenu(true);
+        SetSelectedUnitMenu(entity);
+        ShowSelectedUnitMenu(true);
     }
 
     private void OnDeselectUnit(object data)
@@ -162,12 +162,12 @@ public class UIManager : MonoBehaviour
         Entity entity = (Entity)data;
         RemoveSelectedUnitFromUIList(entity.Code);
         if (Globals.SELECTED_UNITS.Count == 0)
-            _ShowSelectedUnitMenu(false);
+            ShowSelectedUnitMenu(false);
         else
-            _SetSelectedUnitMenu(Globals.SELECTED_UNITS[^1].Entity);
+            SetSelectedUnitMenu(Globals.SELECTED_UNITS[^1].Entity);
     }
 
-    private void _SetSelectedUnitMenu(Entity entity)
+    private void SetSelectedUnitMenu(Entity entity)
     {
         selectedEntity = entity;
         
@@ -220,16 +220,16 @@ public class UIManager : MonoBehaviour
             entity.SkillManagers[i].SetButton(b);
             t.Find("Text").GetComponent<TextMeshProUGUI>().text =
                 entity.SkillManagers[i].skill.skillName;
-            _AddUnitSkillButtonListener(b, i);
+            AddUnitSkillButtonListener(b, i);
         }
     }
     
-    private void _AddUnitSkillButtonListener(Button b, int i)
+    private void AddUnitSkillButtonListener(Button b, int i)
     {
         b.onClick.AddListener(() => selectedEntity.TriggerSkill(i));
     }
 
-    private void _ShowSelectedUnitMenu(bool show)
+    private void ShowSelectedUnitMenu(bool show)
     {
         selectedUnitMenu.SetActive(show);
     }

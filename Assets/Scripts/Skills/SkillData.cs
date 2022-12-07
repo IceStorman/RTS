@@ -15,7 +15,7 @@ public class SkillData : ScriptableObject
     public string skillName;
     public string description;
     public SkillType type;
-    [FormerlySerializedAs("unitReference")] public EntityData entityReference;
+    public EntityData entityReference;
     public float castTime;
     public float cooldown;
     public Sprite sprite;
@@ -26,7 +26,9 @@ public class SkillData : ScriptableObject
         {
             case SkillType.INSTANTIATE_CHARACTER:
                 {
-                    RPC_InstantiateCharacter(source);
+                    
+                    EventManager.PhotonView.RPC("RPC_InstantiateCharacter", RpcTarget.AllBuffered, source);
+                    //RPC_InstantiateCharacter(source);
                 }
                 break;
             default:
@@ -35,18 +37,20 @@ public class SkillData : ScriptableObject
     }
 
     [PunRPC]
-    private void RPC_InstantiateCharacter(GameObject source)
+    private void RPC_InstantiateCharacter(object source)
     {
-        BoxCollider coll = source.GetComponent<BoxCollider>();
+        GameObject g = (GameObject)source;
+
+        var coll = g.GetComponent<BoxCollider>();
         
-        Vector3 instantiationPosition = new Vector3(
-            source.transform.position.x - coll.size.x * 0.7f,
-            source.transform.position.y,
-            source.transform.position.z - coll.size.z * 0.7f
+        Vector3 instantiationPosition = new (
+            g.transform.position.x - coll.size.x * 0.7f,
+            g.transform.position.y,
+            g.transform.position.z - coll.size.z * 0.7f
         );
         
-        CharacterData d = (CharacterData)entityReference;
-        Character c = new Character(d);
+        var d = (CharacterData)entityReference;
+        Character c = new (d);
         
         c.Transform.GetComponent<NavMeshAgent>().Warp(instantiationPosition);
         c.Transform.GetComponent<CharacterManager>().Initialize(c);
