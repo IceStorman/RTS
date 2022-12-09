@@ -85,7 +85,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         var y = lastPlacementPosition.y;
         var z = lastPlacementPosition.z;
 
-        photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, 
+        EventManager.PhotonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, 
             buildingDataIndex, x, y, z);
 
         EventManager.TriggerEvent("UpdateResourceTexts");

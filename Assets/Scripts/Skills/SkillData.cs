@@ -27,8 +27,8 @@ public class SkillData : ScriptableObject
             case SkillType.INSTANTIATE_CHARACTER:
                 {
                     
-                    EventManager.PhotonView.RPC("RPC_InstantiateCharacter", RpcTarget.AllBuffered, source);
-                    //RPC_InstantiateCharacter(source);
+                    //EventManager.PhotonView.RPC("RPC_InstantiateCharacter", RpcTarget.AllBuffered, source);
+                    RPC_InstantiateCharacter(source);
                 }
                 break;
             default:

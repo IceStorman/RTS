@@ -11,26 +11,19 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks
     private string roomName;
     private int roomSize;
 
-    [SerializeField]
-    private GameObject roomListingPrefab;
-    [SerializeField]
-    private Transform roomsPanel;
+    [SerializeField] private GameObject roomListingPrefab;
+    [SerializeField] private Transform roomsPanel;
 
-    [SerializeField]
-    private GameObject createLobbyPanel;
-    [SerializeField]
-    private GameObject lobbyPanel;
-    [SerializeField]
-    private GameObject roomPanel;
-    [SerializeField]
-    private GameObject startGameButton;
+    [SerializeField] private GameObject createLobbyPanel;
+    [SerializeField] private GameObject lobbyPanel;
+    [SerializeField] private GameObject roomPanel;
+    [SerializeField] private GameObject profilePanel;
+    [SerializeField] private GameObject startGameButton;
 
-    [SerializeField]
-    private TextMeshProUGUI roomNameDisplay;
-    [SerializeField]
-    private TextMeshProUGUI countOfPlayersDisplay;
-    [SerializeField]
-    private TextMeshProUGUI maxPlayersDisplay;
+    [SerializeField] private TextMeshProUGUI roomNameDisplay;
+    [SerializeField] private TextMeshProUGUI countOfPlayersDisplay;
+    [SerializeField] private TextMeshProUGUI maxPlayersDisplay;
+    [SerializeField] private TextMeshProUGUI nicknameDisplay;
 
     private void Awake()
     {
@@ -38,12 +31,15 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks
         SwitchPanel(createLobbyPanel, false);
         SwitchPanel(lobbyPanel, false);
         SwitchPanel(roomPanel, false);
+        SwitchPanel(profilePanel, false);
         SwitchStartGameButton();
     }
 
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.NickName = "Player";
+        nicknameDisplay.text = PhotonNetwork.NickName;
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -115,6 +111,12 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks
         roomSize = int.Parse(sizeIn);
     }
 
+    public void OnNicknameChanged(string nameIn)
+    {
+        PhotonNetwork.NickName = nameIn;
+        nicknameDisplay.text = PhotonNetwork.NickName;
+    }
+
     public void JoinLobbyOnClick()
     {
         if (!PhotonNetwork.InLobby)
@@ -182,5 +184,10 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks
     private void SwitchStartGameButton()
     {
         startGameButton.SetActive(PhotonNetwork.IsMasterClient);
+    }
+
+    public void SwitchProfileMenu(bool isActive)
+    {
+        SwitchPanel(profilePanel, isActive);
     }
 }

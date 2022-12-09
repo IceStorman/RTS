@@ -34,6 +34,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         connectionText.SetActive(false);
     }
 
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        PhotonNetwork.Reconnect();
+    }
+
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         int index = otherPlayer.ActorNumber;
