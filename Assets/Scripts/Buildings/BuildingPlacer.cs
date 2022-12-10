@@ -85,8 +85,9 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         var y = lastPlacementPosition.y;
         var z = lastPlacementPosition.z;
 
-        EventManager.PhotonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, 
+        photonView.RPC("RPC_PlaceBuilding", RpcTarget.AllBuffered, 
             buildingDataIndex, x, y, z);
+        TakeResources();
 
         EventManager.TriggerEvent("UpdateResourceTexts");
         EventManager.TriggerEvent("CheckBuildingButtons");
@@ -116,8 +117,16 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         building.SetPosition(position);
 
         building.Place();
-        
+
         Globals.UpdateNavMeshSurface();
+    }
+
+    private void TakeResources()
+    {
+        foreach (ResourceValue resource in buildingSketch.Data.cost)
+        {
+            Globals.GAME_RESOURCES[resource.code].AddAmount(-resource.amount);
+        }
     }
 
     private void CancelPlacedBuilding()

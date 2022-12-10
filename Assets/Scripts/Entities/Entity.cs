@@ -54,10 +54,10 @@ public class Entity
     {
         _transform.GetComponent<BoxCollider>().isTrigger = false;
         
-        foreach (ResourceValue resource in _data.cost)
+        /*foreach (ResourceValue resource in _data.cost)
         {
             Globals.GAME_RESOURCES[resource.code].AddAmount(-resource.amount);
-        }
+        }*/
     }
 
     public bool CanBuy()
