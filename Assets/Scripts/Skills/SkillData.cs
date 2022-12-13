@@ -42,11 +42,12 @@ public class SkillData : ScriptableObject
         GameObject g = (GameObject)source;
 
         var coll = g.GetComponent<BoxCollider>();
-        
+
+        var position = g.transform.position;
         Vector3 instantiationPosition = new (
-            g.transform.position.x - coll.size.x * 0.7f,
-            g.transform.position.y,
-            g.transform.position.z - coll.size.z * 0.7f
+            position.x - coll.size.x * 0.7f,
+            position.y,
+            position.z - coll.size.z * 0.7f
         );
         
         var d = (CharacterData)entityReference;

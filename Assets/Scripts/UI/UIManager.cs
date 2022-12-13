@@ -213,7 +213,7 @@ public class UIManager : MonoBehaviour
         if (entity.SkillManagers.Count <= 0) return;
         for (int i = 0; i < entity.SkillManagers.Count; i++)
         {
-            GameObject g = GameObject.Instantiate(
+            GameObject g = Instantiate(
                 unitSkillButtonPrefab, selectedUnitActionButtonsParent);
             Transform t = g.transform;
             Button b = g.GetComponent<Button>();
