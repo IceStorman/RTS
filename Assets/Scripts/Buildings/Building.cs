@@ -19,9 +19,9 @@ public class Building : Entity
     public Building(BuildingData data, List<ResourceValue> production) : 
         base(data, production)
     {
-        _buildingManager = _transform.GetComponent<BuildingManager>();
+        _buildingManager = transform.GetComponent<BuildingManager>();
         _materials = new List<Material>();
-        foreach (Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials)
+        foreach (Material material in transform.Find("Mesh").GetComponent<Renderer>().materials)
         {
             _materials.Add(new Material(material));
         }
@@ -59,7 +59,7 @@ public class Building : Entity
             default:
                 return;
         }
-        _transform.Find("Mesh").GetComponent<Renderer>().materials = materials.ToArray();
+        transform.Find("Mesh").GetComponent<Renderer>().materials = materials.ToArray();
     }
 
     public override void Place()
@@ -85,7 +85,7 @@ public class Building : Entity
         {
             for (int i = 0; i < Globals.BUILDING_DATA.Length; i++)
             {
-                if (Globals.BUILDING_DATA[i].code == _data.code)
+                if (Globals.BUILDING_DATA[i].code == data.code)
                     return i;
             }
             return -1;

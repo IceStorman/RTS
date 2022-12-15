@@ -1,12 +1,11 @@
-using System;
-using System.Linq;
-using ExitGames.Client.Photon;
-using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GameManager : MonoBehaviourPunCallbacks
+public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+    public Vector3 startPosition;
+    
     public GameParameters gameParameters;
 
     private Ray ray;
@@ -14,15 +13,22 @@ public class GameManager : MonoBehaviourPunCallbacks
     
     private void Awake()
     {
+        Instance = this;
         DataHandler.LoadGameData();
         GetComponent<DayAndNightCycler>().enabled = gameParameters.enableDayAndNightCycle;
         Globals.NAV_MESH_SURFACE = GameObject.Find("Terrain").GetComponent<NavMeshSurface>();
         Globals.UpdateNavMeshSurface();
+        GetStartPosition();
     }
 
     private void Update()
     {
         CheckUnitsNavigation();
+    }
+    
+    private void GetStartPosition()
+    {
+        startPosition = Utils.MiddleOfScreenPointToWorld();
     }
     
     private void CheckUnitsNavigation()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Photon.Pun;
@@ -10,14 +11,21 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private RaycastHit raycastHit;
     private Vector3 lastPlacementPosition;
 
-    public void SelectPlacedBuilding(int buildingIndex)
-    {
-        PreparePlacedBuilding(buildingIndex);
-    }
-
     private void Awake()
     {
         photonView.GetComponent<PhotonView>();
+    }
+
+    private void Start()
+    {
+        buildingSketch = new Building(Globals.BUILDING_DATA[0]);
+        buildingSketch.Transform.GetComponent<BuildingManager>().Initialize(buildingSketch);
+        
+        buildingSketch.SetPosition(GameManager.Instance.startPosition);
+        
+        PlaceBuilding();
+        
+        CancelPlacedBuilding();
     }
 
     private void Update()
@@ -34,6 +42,11 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         {
             TryPlaceBuilding();
         }
+    }
+    
+    public void SelectPlacedBuilding(int buildingIndex)
+    {
+        PreparePlacedBuilding(buildingIndex);
     }
 
     private void TryPlaceBuilding()

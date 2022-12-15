@@ -9,7 +9,9 @@ public class EntityManager : MonoBehaviour
     private Transform _canvas;
     private GameObject _healthbar;
 
-    protected BoxCollider _collider;
+    public GameObject fov;
+
+    protected BoxCollider collider;
     public virtual Entity Entity { get; set; }
 
     private void Awake()
@@ -19,7 +21,7 @@ public class EntityManager : MonoBehaviour
 
     public void Initialize(Entity entity)
     {
-        _collider = GetComponent<BoxCollider>();
+        collider = GetComponent<BoxCollider>();
         Entity = entity;
     }
 
@@ -40,7 +42,7 @@ public class EntityManager : MonoBehaviour
         return true;
     }
 
-    private void _SelectUtil()
+    private void SelectUtil()
     {
         if (Globals.SELECTED_UNITS.Contains(this)) return;
         Globals.SELECTED_UNITS.Add(this);
@@ -61,13 +63,18 @@ public class EntityManager : MonoBehaviour
         EventManager.TriggerEvent("SelectEntity", Entity);
     }
 
+    public void EnableFOV()
+    {
+        fov.SetActive(true);
+    }
+
     public void Select() => Select(false, false);
 
     public void Select(bool singleClick, bool holdingShift)
     {
         if (!singleClick)
         {
-            _SelectUtil();
+            SelectUtil();
             return;
         }
 
@@ -76,12 +83,12 @@ public class EntityManager : MonoBehaviour
             List<EntityManager> selectedUnits = new List<EntityManager>(Globals.SELECTED_UNITS);
             foreach (EntityManager um in selectedUnits)
                 um.Deselect();
-            _SelectUtil();
+            SelectUtil();
         }
         else
         {
             if (!Globals.SELECTED_UNITS.Contains(this))
-                _SelectUtil();
+                SelectUtil();
             else
                 Deselect();
         }

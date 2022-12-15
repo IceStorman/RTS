@@ -9,6 +9,7 @@ public class EntityData : ScriptableObject
     public string code;
     public string description;
     public int healthpoints;
+    public float fieldOfView;
     public GameObject prefab;
     public List<ResourceValue> cost;
     public List<SkillData> skills = new();

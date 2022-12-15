@@ -1,9 +1,4 @@
-using System;
 using UnityEngine;
-using Newtonsoft.Json;
-using Photon.Pun;
-using System.Text;
-using ExitGames.Client.Photon;
 
 public static class Utils
 {
@@ -78,9 +73,9 @@ public static class Utils
         };
         Rect retVal = Rect.MinMaxRect(float.MaxValue, float.MaxValue, float.MinValue, float.MinValue);
 
-        for (int i = 0; i < vertices.Length; i++)
+        foreach (var t in vertices)
         {
-            Vector3 v = camera.WorldToScreenPoint(vertices[i]);
+            Vector3 v = camera.WorldToScreenPoint(t);
             if (v.x < retVal.xMin)
                 retVal.xMin = v.x;
             if (v.y < retVal.yMin)
@@ -92,6 +87,19 @@ public static class Utils
         }
 
         return retVal;
+    }
+
+    public static Vector3 MiddleOfScreenPointToWorld()
+        => MiddleOfScreenPointToWorld(Camera.main);
+    
+    public static Vector3 MiddleOfScreenPointToWorld(Camera cam)
+    {
+        var ray = cam.ScreenPointToRay(0.5f * new Vector2(Screen.width, Screen.height));
+        return Physics.Raycast(ray,
+            out var hit,
+   1000f,
+            Globals.TERRAIN_LAYER_MASK) 
+            ? hit.point : Vector3.zero;
     }
 
     public static int GetAlphaKeyValue(string inputString)
@@ -106,14 +114,5 @@ public static class Utils
         if (inputString == "8" || inputString == "!") return 8;
         if (inputString == "9" || inputString == "?") return 9;
         return -1;
-    }
-
-    public static (float, float, float) ConvertVector3(Vector3 position)
-    {
-        float x = position.x;
-        float y = position.y;
-        float z = position.z;
-        
-        return (x, y, z);
     }
 }

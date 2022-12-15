@@ -14,7 +14,7 @@ public class BuildingManager : EntityManager
 
     public void Initialize(Building building)
     {
-        _collider = GetComponent<BoxCollider>();
+        collider = GetComponent<BoxCollider>();
         _building = building;
     }
 
@@ -60,8 +60,8 @@ public class BuildingManager : EntityManager
         if(_nCollisions > 0) return false;
 
         Vector3 p = transform.position;
-        Vector3 c = _collider.center;
-        Vector3 e = _collider.size / 2f;
+        Vector3 c = collider.center;
+        Vector3 e = collider.size / 2f;
         
         float bottomHeight = c.y - e.y + 0.5f;
         
