@@ -183,7 +183,6 @@ GameObject:
   - component: {fileID: 2838478994900860077}
   - component: {fileID: 7585461569223141739}
   - component: {fileID: 8979599955755262397}
-  - component: {fileID: -2037879203478454108}
   - component: {fileID: 5662681641715529753}
   m_Layer: 0
   m_Name: Tower
@@ -253,28 +252,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionCircle: {fileID: 1778965355562038958}
   fov: {fileID: 5081303692088468744}
---- !u!114 &-2037879203478454108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2459024928930821840}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!208 &5662681641715529753
 NavMeshObstacle:
   m_ObjectHideFlags: 0

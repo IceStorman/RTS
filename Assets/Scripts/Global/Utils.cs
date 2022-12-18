@@ -95,11 +95,12 @@ public static class Utils
     public static Vector3 MiddleOfScreenPointToWorld(Camera cam)
     {
         var ray = cam.ScreenPointToRay(0.5f * new Vector2(Screen.width, Screen.height));
-        return Physics.Raycast(ray,
+        return Physics.Raycast(
+            ray,
             out var hit,
-   1000f,
-            Globals.TERRAIN_LAYER_MASK) 
-            ? hit.point : Vector3.zero;
+            1000f,
+            Globals.TERRAIN_LAYER_MASK
+        ) ? hit.point : Vector3.zero;
     }
 
     public static int GetAlphaKeyValue(string inputString)

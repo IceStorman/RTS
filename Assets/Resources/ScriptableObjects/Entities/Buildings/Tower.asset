@@ -16,6 +16,7 @@ MonoBehaviour:
   code: tower
   description: Defence building
   healthpoints: 120
+  fieldOfView: 25
   prefab: {fileID: 2459024928930821840, guid: d0d7c9c482b146149884b4a02bedead9, type: 3}
   cost:
   - code: gold
@@ -24,3 +25,4 @@ MonoBehaviour:
     amount: 100
   - code: stone
     amount: 170
+  skills: []

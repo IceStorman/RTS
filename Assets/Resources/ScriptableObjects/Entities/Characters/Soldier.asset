@@ -16,6 +16,7 @@ MonoBehaviour:
   code: soldier
   description: This is your standart unit
   healthpoints: 30
+  fieldOfView: 20
   prefab: {fileID: 6677275719392375563, guid: ed21a181d54fda84b95f8ee0cde97c6d, type: 3}
   cost:
   - code: gold

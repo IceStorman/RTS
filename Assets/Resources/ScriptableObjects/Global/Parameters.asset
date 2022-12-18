@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Parameters
   m_EditorClassIdentifier: 
   enableDayAndNightCycle: 1
-  dayLengthInSeconds: 20
+  dayLengthInSeconds: 300
   dayInitialRatio: 0.2

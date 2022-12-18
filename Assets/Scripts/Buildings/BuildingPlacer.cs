@@ -22,6 +22,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         buildingSketch.Transform.GetComponent<BuildingManager>().Initialize(buildingSketch);
         
         buildingSketch.SetPosition(GameManager.Instance.startPosition);
+        lastPlacementPosition = buildingSketch.Transform.position;
         
         PlaceBuilding();
         
