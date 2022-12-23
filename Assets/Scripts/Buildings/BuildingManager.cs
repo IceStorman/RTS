@@ -9,7 +9,7 @@ public class BuildingManager : EntityManager
     public override Entity Entity
     {
         get => _building;
-        set => _building = value is Building building ? building : null;
+        protected set => _building = value is Building building ? building : null;
     }
 
     public void Initialize(Building building)

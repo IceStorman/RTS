@@ -11,7 +11,7 @@ public class CharacterManager : EntityManager
     public override Entity Entity
     {
         get => character;
-        set => character = value is Character character1 ? character1 : null;
+        protected set => character = value is Character character1 ? character1 : null;
     }
 
     private void Start()

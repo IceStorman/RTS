@@ -12,7 +12,7 @@ public class EntityManager : MonoBehaviour
     public GameObject fov;
 
     protected BoxCollider collider;
-    public virtual Entity Entity { get; set; }
+    public virtual Entity Entity { get; protected set; }
 
     private void Awake()
     {
