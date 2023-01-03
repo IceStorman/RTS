@@ -16,7 +16,7 @@ MonoBehaviour:
   code: house
   description: Just a civilian building
   healthpoints: 100
-  fieldOfView: 35
+  fieldOfView: 70
   prefab: {fileID: 8353320022312010329, guid: 1d617b285490f9d43a68989106d0e424, type: 3}
   cost:
   - code: gold

@@ -20,7 +20,7 @@ public class Entity
 
         var g = Object.Instantiate(data.prefab);
         transform = g.transform;
-        transform.Find("FOV").transform.localScale = new Vector3(data.fieldOfView, data.fieldOfView, 1f);
+        //transform.Find("FOV").transform.localScale = new Vector3(data.fieldOfView, data.fieldOfView, 1f);
 
         uid = System.Guid.NewGuid().ToString();
         level = 1;

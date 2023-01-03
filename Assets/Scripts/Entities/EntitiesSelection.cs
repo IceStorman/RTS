@@ -12,10 +12,13 @@ public class EntitiesSelection : MonoBehaviour
     private Ray _ray;
     private RaycastHit _raycastHit;
 
-    private Dictionary<int, List<EntityManager>> _selectionGroups = new Dictionary<int, List<EntityManager>>();
+    private Dictionary<int, List<EntityManager>> _selectionGroups = new();
 
     private void Update()
     {
+        if (Input.GetMouseButtonUp(0))
+            _isDraggingMouseBox = false;
+        
         if (EventSystem.current.IsPointerOverGameObject()) return;
         
         if (Input.GetMouseButtonDown(0))
@@ -24,8 +27,6 @@ public class EntitiesSelection : MonoBehaviour
             _dragStartPosition = Input.mousePosition;
         }
 
-        if (Input.GetMouseButtonUp(0))
-            _isDraggingMouseBox = false;
 
         if (_isDraggingMouseBox && _dragStartPosition != Input.mousePosition)
             _SelectUnitsInDraggingBox();

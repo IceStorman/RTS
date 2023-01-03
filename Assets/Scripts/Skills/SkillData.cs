@@ -55,5 +55,7 @@ public class SkillData : ScriptableObject
         
         c.Transform.GetComponent<NavMeshAgent>().Warp(instantiationPosition);
         c.Transform.GetComponent<CharacterManager>().Initialize(c);
+        
+        Globals.AddEntity(c);
     }
 }

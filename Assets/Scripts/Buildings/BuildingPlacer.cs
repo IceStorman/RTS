@@ -133,7 +133,7 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
         building.Place();
 
         Globals.UpdateNavMeshSurface();
-        FogCreator.summonedEntites.Add(building);
+        Globals.AddEntity(building);
     }
 
     private void TakeResources()

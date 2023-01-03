@@ -65,7 +65,7 @@ public class EntityManager : MonoBehaviour
 
     public void EnableFOV()
     {
-        fov.SetActive(true);
+        //fov.SetActive(true);
     }
 
     public void Select() => Select(false, false);

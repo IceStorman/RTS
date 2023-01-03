@@ -5,8 +5,6 @@ using UnityEngine;
  
 public class FogCreator : MonoBehaviour
 {
-    public static List<Entity> summonedEntites;
-
     [SerializeField] private GameObject fogOfWarPlane;
     [SerializeField] private LayerMask fogOfWarMask;
     
@@ -24,7 +22,6 @@ public class FogCreator : MonoBehaviour
         _mesh = fogOfWarPlane.GetComponent<MeshFilter>().mesh;
         _verticles = _mesh.vertices;
         _colors = new Color[_verticles.Length];
-        summonedEntites = new List<Entity>();
 
         for (int i = 0; i < _colors.Length; i++)
         {
@@ -41,7 +38,7 @@ public class FogCreator : MonoBehaviour
 
     private void Update()
     {
-        foreach (var entity in summonedEntites)
+        foreach (var entity in Globals.SUMMONED_ENTITIES)
         {
             var position = transform.position;
             Ray ray = new(position, entity.Transform.position - position);
@@ -60,7 +57,9 @@ public class FogCreator : MonoBehaviour
 
                     if (dist < entity.Data.fieldOfView * entity.Data.fieldOfView)
                     {
-                        float alpha = Math.Min(_colors[i].a, dist / entity.Data.fieldOfView * entity.Data.fieldOfView);
+                        //Debug.Log($"Alpha: {_colors[i].a}, Dist: {dist}, viewSqr: {entity.Data.fieldOfView * entity.Data.fieldOfView}");
+                        //Debug.Log(_colors[i].a + ", " + dist / entity.Data.fieldOfView * entity.Data.fieldOfView);
+                        float alpha = Mathf.Min(_colors[i].a, dist / (entity.Data.fieldOfView * entity.Data.fieldOfView));
                         _colors[i].a = alpha;
                     }
                 }
