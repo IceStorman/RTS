@@ -13,8 +13,6 @@ public class EventManager : MonoBehaviour
 
     private static EventManager _eventManager;
 
-    public static PhotonView PhotonView;
-
     public static EventManager Instance
     {
         get
@@ -30,11 +28,6 @@ public class EventManager : MonoBehaviour
 
             return _eventManager;
         }
-    }
-
-    private void Awake()
-    {
-        PhotonView = GetComponent<PhotonView>();
     }
 
     private void Init()

@@ -43,28 +43,23 @@ public class FogCreator : MonoBehaviour
             var position = transform.position;
             Ray ray = new(position, entity.Transform.position - position);
 
-            if (Physics.Raycast(
+            if (!Physics.Raycast(
                     ray,
                     out RaycastHit hit,
                     1000f,
                     fogOfWarMask,
-                    QueryTriggerInteraction.Collide))
+                    QueryTriggerInteraction.Collide)) continue;
+            for (int i = 0; i < _verticles.Length; i++)
             {
-                for (int i = 0; i < _verticles.Length; i++)
-                {
-                    Vector3 v = fogOfWarPlane.transform.TransformPoint(_verticles[i]);
-                    float dist = Vector3.SqrMagnitude(v - hit.point);
+                Vector3 v = fogOfWarPlane.transform.TransformPoint(_verticles[i]);
+                float dist = Vector3.SqrMagnitude(v - hit.point);
 
-                    if (dist < entity.Data.fieldOfView * entity.Data.fieldOfView)
-                    {
-                        //Debug.Log($"Alpha: {_colors[i].a}, Dist: {dist}, viewSqr: {entity.Data.fieldOfView * entity.Data.fieldOfView}");
-                        //Debug.Log(_colors[i].a + ", " + dist / entity.Data.fieldOfView * entity.Data.fieldOfView);
-                        float alpha = Mathf.Min(_colors[i].a, dist / (entity.Data.fieldOfView * entity.Data.fieldOfView));
-                        _colors[i].a = alpha;
-                    }
-                }
-                UpdateColor();
+                if (!(dist < entity.Data.fieldOfView * entity.Data.fieldOfView)) continue;
+                //Debug.Log($"Alpha: {_colors[i].a}, Dist: {dist}, viewSqr: {entity.Data.fieldOfView * entity.Data.fieldOfView}");
+                float alpha = Mathf.Min(_colors[i].a, dist / (entity.Data.fieldOfView * entity.Data.fieldOfView));
+                _colors[i].a = alpha;
             }
+            UpdateColor();
         }
     }
 }

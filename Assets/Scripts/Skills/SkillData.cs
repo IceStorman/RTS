@@ -26,9 +26,7 @@ public class SkillData : ScriptableObject
         {
             case SkillType.INSTANTIATE_CHARACTER:
                 {
-                    
-                    //EventManager.PhotonView.RPC("RPC_InstantiateCharacter", RpcTarget.AllBuffered, source);
-                    RPC_InstantiateCharacter(source);
+                    InstantiateCharacter(source);
                 }
                 break;
             default:
@@ -36,23 +34,33 @@ public class SkillData : ScriptableObject
         }
     }
 
-    [PunRPC]
-    private void RPC_InstantiateCharacter(object source)
+    private void InstantiateCharacter(GameObject source)
     {
-        GameObject g = (GameObject)source;
+        var coll = source.GetComponent<BoxCollider>();
 
-        var coll = g.GetComponent<BoxCollider>();
+        var position = source.transform.position;
 
-        var position = g.transform.position;
+        var size = coll.size;
         Vector3 instantiationPosition = new (
-            position.x - coll.size.x * 0.7f,
+            position.x - size.x * 0.7f,
             position.y,
-            position.z - coll.size.z * 0.7f
+            position.z - size.z * 0.7f
         );
+        var x = instantiationPosition.x;
+        var y = instantiationPosition.y;
+        var z = instantiationPosition.z;
         
+        //photonView.RPC("RPC_InstantiateCharacter", RpcTarget.AllBuffered, x, y, z);
+        RPC_InstantiateCharacter(x, y, z);
+    }
+    
+    [PunRPC]
+    private void RPC_InstantiateCharacter(float x, float y, float z)
+    {
         var d = (CharacterData)entityReference;
         Character c = new (d);
         
+        Vector3 instantiationPosition = new(x, y, z);
         c.Transform.GetComponent<NavMeshAgent>().Warp(instantiationPosition);
         c.Transform.GetComponent<CharacterManager>().Initialize(c);
         

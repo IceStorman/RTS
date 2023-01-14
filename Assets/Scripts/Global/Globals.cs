@@ -9,7 +9,7 @@ public class Globals
     
     public static List<Entity> SUMMONED_ENTITIES = new();
 
-    public static List<EntityManager> SELECTED_UNITS = new List<EntityManager>();
+    public static List<EntityManager> SELECTED_UNITS = new();
 
     public static BuildingData[] BUILDING_DATA;
 

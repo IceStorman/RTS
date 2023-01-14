@@ -11,11 +11,6 @@ public class BuildingPlacer : MonoBehaviourPunCallbacks
     private RaycastHit raycastHit;
     private Vector3 lastPlacementPosition;
 
-    private void Awake()
-    {
-        photonView.GetComponent<PhotonView>();
-    }
-
     private void Start()
     {
         buildingSketch = new Building(Globals.BUILDING_DATA[0]);
